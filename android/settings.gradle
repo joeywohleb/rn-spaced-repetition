@@ -1,0 +1,3 @@
+rootProject.name = 'spacedRepetition'
+
+include ':app'
