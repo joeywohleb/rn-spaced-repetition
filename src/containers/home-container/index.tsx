@@ -8,7 +8,7 @@ const instructions = Platform.select({
 
 interface Props {}
 
-export default class App extends Component<Props> {
+export default class HomeContainer extends Component<Props> {
     public render() {
         return (
             <View style={styles.container}>
