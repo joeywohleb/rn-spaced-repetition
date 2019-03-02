@@ -1,4 +1,4 @@
-import { rootReducer } from '../store/combine-reducers';
+import rootReducer from '../store/combine-reducers';
 
 export * from './flashcard-set';
 export * from './flashcard';

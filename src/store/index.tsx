@@ -1,12 +1,15 @@
-import { applyMiddleware, compose, createStore } from 'redux';
+import { applyMiddleware, compose, createStore, Middleware } from 'redux';
 import { logger } from 'redux-logger';
+import thunk from 'redux-thunk';
 
 import rootReducer from './combine-reducers';
 
-const middlewares = [];
+const middlewares: Middleware[] = [];
 if (__DEV__) {
     middlewares.push(logger);
 }
+
+middlewares.push(thunk);
 
 const enhancer = compose(applyMiddleware(...middlewares));
 

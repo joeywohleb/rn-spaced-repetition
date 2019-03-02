@@ -1,4 +1,4 @@
 export * from './action-types';
-export * from './action-creators';
+export * from './actions';
 export * from './reducers';
 export * from './state';

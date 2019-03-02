@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { setsReducer } from './sets';
+import { setsReducer as sets } from './sets';
 
 const rootReducer = combineReducers({
-    setsReducer,
+    sets,
 });
 
 export default rootReducer;
