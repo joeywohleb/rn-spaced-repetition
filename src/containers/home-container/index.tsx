@@ -1,10 +1,9 @@
-import { Container, Content, Header, List, ListItem } from 'native-base';
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+
 import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
-
 import { AppState, FlashcardSet } from '../../models';
+import { Home } from '../../screens';
 import { loadFlashcardSets } from '../../store/sets';
 
 interface Props {
@@ -18,25 +17,8 @@ class HomeContainer extends Component<Props> {
         super(props);
     }
 
-    public componentDidMount() {
-        this.props.loadFlashcardSets();
-    }
-
     public render() {
-        return (
-            <Container>
-                <Header />
-                <Content>
-                    <List>
-                        {this.props.sets.map((s: FlashcardSet) => (
-                            <ListItem key={s.name}>
-                                <Text>{s.name}</Text>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Content>
-            </Container>
-        );
+        return <Home {...this.props} />;
     }
 }
 
