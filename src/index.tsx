@@ -3,13 +3,18 @@ import { AppRegistry } from 'react-native';
 import { Provider } from 'react-redux';
 import configureStore from './store';
 
-import { createAppContainer, createStackNavigator, NavigationContainer } from 'react-navigation';
+import {
+    createAppContainer,
+    createStackNavigator,
+    NavigationContainer,
+    NavigationContainerComponent,
+} from 'react-navigation';
 import { name as appName } from '../app.json';
 import HomeContainer from './containers/home-container';
+import { NavigationService } from './services';
 
 const store = configureStore();
 
-// tslint:disable-next-line: variable-name
 const AppNavigator: NavigationContainer = createStackNavigator(
     {
         Home: HomeContainer,
@@ -20,14 +25,19 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     },
 );
 
-// tslint:disable-next-line: variable-name
+export type NavigationRoutes = 'Home';
+
 const AppContainer: NavigationContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
     public render() {
         return (
             <Provider store={store}>
-                <AppContainer />
+                <AppContainer
+                    ref={(navigatorRef: NavigationContainerComponent) => {
+                        NavigationService.setTopLevelNavigator(navigatorRef);
+                    }}
+                />
             </Provider>
         );
     }

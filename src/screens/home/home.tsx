@@ -1,4 +1,4 @@
-import { Body, Container, Content, Header, Left, List, ListItem, Right, Title } from 'native-base';
+import { Body, Container, Content, Header, List, ListItem, Title } from 'native-base';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 
