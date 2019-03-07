@@ -1,4 +1,4 @@
-import { Body, Container, Content, Header, List, ListItem, Title } from 'native-base';
+import { Body, Container, Content, Header, Icon, Left, List, ListItem, Right, Title } from 'native-base';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 
@@ -32,7 +32,12 @@ export class Home extends Component<Props> {
                     <List>
                         {this.props.decks.map((s: Deck) => (
                             <ListItem key={s.name}>
-                                <Text>{s.name}</Text>
+                                <Left>
+                                    <Text>{s.name}</Text>
+                                </Left>
+                                <Right>
+                                    <Icon name="arrow-forward" />
+                                </Right>
                             </ListItem>
                         ))}
                     </List>
