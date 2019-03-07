@@ -3,12 +3,13 @@ import React, { Component } from 'react';
 import { Text } from 'react-native';
 
 import { Deck } from '../../models';
-import { loadDecks } from '../../store/decks';
+import { loadDecks, selectDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
 
     loadDecks: typeof loadDecks;
+    selectDeck: typeof selectDeck;
 }
 
 export class Home extends Component<Props> {
@@ -30,10 +31,10 @@ export class Home extends Component<Props> {
                 </Header>
                 <Content>
                     <List>
-                        {this.props.decks.map((s: Deck) => (
-                            <ListItem key={s.name}>
+                        {this.props.decks.map((d: Deck) => (
+                            <ListItem key={d.name} onPress={() => this.props.selectDeck(d)}>
                                 <Left>
-                                    <Text>{s.name}</Text>
+                                    <Text>{d.name}</Text>
                                 </Left>
                                 <Right>
                                     <Icon name="arrow-forward" />

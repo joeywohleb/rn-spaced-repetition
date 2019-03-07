@@ -3,6 +3,7 @@ import { Dispatch } from 'redux';
 import { SetDecksAction } from '.';
 import defaultSets from '../../assets/json/default-set.json';
 import { Deck, Flashcard } from '../../models';
+import { NavigationService } from '../../services';
 import { decksActionTypes as ActionTypes, SetSelectedDeckAction, SetSelectedFlashcardAction } from './action-types';
 
 export const setDecks = (payload: Deck[]): SetDecksAction => ({
@@ -23,5 +24,12 @@ export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAc
 export const loadDecks = () => {
     return async (dispatch: Dispatch<any>) => {
         dispatch(setDecks(defaultSets));
+    };
+};
+
+export const selectDeck = (deck: Deck) => {
+    return async (dispatch: Dispatch<any>) => {
+        await dispatch(setSelectedDeck(deck));
+        NavigationService.navigateTo('FlashcardView');
     };
 };

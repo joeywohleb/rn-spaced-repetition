@@ -4,12 +4,13 @@ import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
 import { Home } from '../../screens';
-import { loadDecks } from '../../store/decks';
+import { loadDecks, selectDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
 
     loadDecks: typeof loadDecks;
+    selectDeck: typeof selectDeck;
 }
 
 class HomeContainer extends Component<Props> {
@@ -32,6 +33,7 @@ export default connect(
         bindActionCreators(
             {
                 loadDecks,
+                selectDeck,
             },
             dispatch,
         ),
