@@ -2,13 +2,13 @@ import { Body, Container, Content, Header, List, ListItem, Title } from 'native-
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 
-import { FlashcardSet } from '../../models';
-import { loadFlashcardSets } from '../../store/sets';
+import { Deck } from '../../models';
+import { loadDecks } from '../../store/decks';
 
 interface Props {
-    sets: FlashcardSet[];
+    decks: Deck[];
 
-    loadFlashcardSets: typeof loadFlashcardSets;
+    loadDecks: typeof loadDecks;
 }
 
 export class Home extends Component<Props> {
@@ -17,7 +17,7 @@ export class Home extends Component<Props> {
     }
 
     public componentDidMount() {
-        this.props.loadFlashcardSets();
+        this.props.loadDecks();
     }
 
     public render() {
@@ -30,7 +30,7 @@ export class Home extends Component<Props> {
                 </Header>
                 <Content>
                     <List>
-                        {this.props.sets.map((s: FlashcardSet) => (
+                        {this.props.decks.map((s: Deck) => (
                             <ListItem key={s.name}>
                                 <Text>{s.name}</Text>
                             </ListItem>
