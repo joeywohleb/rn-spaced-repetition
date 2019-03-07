@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
-import { AppState, FlashcardSet } from '../../models';
+
+import { AppState, Deck } from '../../models';
 import { Home } from '../../screens';
-import { loadFlashcardSets } from '../../store/sets';
+import { loadDecks, selectDeck } from '../../store/decks';
 
 interface Props {
-    sets: FlashcardSet[];
+    decks: Deck[];
 
-    loadFlashcardSets: typeof loadFlashcardSets;
+    loadDecks: typeof loadDecks;
+    selectDeck: typeof selectDeck;
 }
 
 class HomeContainer extends Component<Props> {
@@ -25,13 +26,14 @@ class HomeContainer extends Component<Props> {
 export default connect(
     (state: AppState) => {
         return {
-            sets: state.sets.sets,
+            decks: state.decks.decks,
         };
     },
     (dispatch: Dispatch<Action<AppState>>) =>
         bindActionCreators(
             {
-                loadFlashcardSets,
+                loadDecks,
+                selectDeck,
             },
             dispatch,
         ),

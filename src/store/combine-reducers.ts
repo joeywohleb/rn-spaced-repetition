@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import { setsReducer as sets } from './sets';
+import { decksReducer as decks } from './decks';
 
 export default combineReducers({
-    sets,
+    decks,
 });

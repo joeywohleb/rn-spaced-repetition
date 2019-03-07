@@ -10,6 +10,7 @@ import {
     NavigationContainerComponent,
 } from 'react-navigation';
 import { name as appName } from '../app.json';
+import FlashcardViewContainer from './containers/flashcard-view-container';
 import HomeContainer from './containers/home-container';
 import { NavigationService } from './services';
 
@@ -18,6 +19,7 @@ const store = configureStore();
 const AppNavigator: NavigationContainer = createStackNavigator(
     {
         Home: HomeContainer,
+        FlashcardView: FlashcardViewContainer,
     },
     {
         initialRouteName: 'Home',
@@ -25,7 +27,7 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     },
 );
 
-export type NavigationRoutes = 'Home';
+export type NavigationRoutes = 'Home' | 'FlashcardView';
 
 const AppContainer: NavigationContainer = createAppContainer(AppNavigator);
 
