@@ -7,7 +7,7 @@ const initialState: DecksAppState = {
     selectedFlashcard: undefined,
 };
 
-export const decksReducer = (state = initialState, action: any): DecksAppState => {
+export const decksReducer = (state: DecksAppState = initialState, action: any): DecksAppState => {
     switch (action.type) {
         case ActionTypes.SET_DECKS:
             return {

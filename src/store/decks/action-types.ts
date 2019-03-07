@@ -1,6 +1,6 @@
 import { Deck, Flashcard } from '../../models';
 
-const ns: string = 'SETS';
+const ns: string = 'DECKS';
 
 export const decksActionTypes = {
     SET_DECKS: `${ns}:SET_FLASHCARD_SETS`,

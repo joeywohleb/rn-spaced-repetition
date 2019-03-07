@@ -25,7 +25,7 @@ class HomeContainer extends Component<Props> {
 export default connect(
     (state: AppState) => {
         return {
-            sets: state.decks.decks,
+            decks: state.decks.decks,
         };
     },
     (dispatch: Dispatch<Action<AppState>>) =>
