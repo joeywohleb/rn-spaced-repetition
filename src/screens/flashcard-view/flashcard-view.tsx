@@ -1,15 +1,13 @@
-import { Body, Card, CardItem, Container, Content, Header, Left, Title } from 'native-base';
+import { Body, Card, CardItem, Container, Content, Left } from 'native-base';
 import React, { Component } from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native';
+import FlipCard from 'react-native-flip-card';
 
+import { Header } from '../../components';
 import { Deck } from '../../models';
-import { FlipFlashcardAction } from '../../store/decks';
 
 interface Props {
     selectedDeck?: Deck;
-    displayAnswer: boolean;
-
-    flipFlashcard: () => FlipFlashcardAction;
 }
 
 export class FlashcardView extends Component<Props> {
@@ -22,28 +20,29 @@ export class FlashcardView extends Component<Props> {
             return null;
         }
         return (
-            <Container>
-                <Header>
-                    <Body>
-                        <Title>Flashcards</Title>
-                    </Body>
-                </Header>
-                <Content>
-                    <TouchableOpacity onPress={this.props.flipFlashcard}>
-                        <Card style={{ elevation: 3 }}>
+            <Container style={{ flex: 1 }}>
+                <Header>Flashcards</Header>
+                <Content style={{ flex: 1 }}>
+                    <FlipCard style={{ borderWidth: 0, elevation: 3, flex: 1 }}>
+                        <Card style={{ minHeight: 100 }}>
                             <CardItem>
                                 <Left>
                                     <Body>
-                                        <Text>
-                                            {this.props.displayAnswer
-                                                ? this.props.selectedDeck.cards[0].back
-                                                : this.props.selectedDeck.cards[0].front}
-                                        </Text>
+                                        <Text>{this.props.selectedDeck.cards[0].front}</Text>
                                     </Body>
                                 </Left>
                             </CardItem>
                         </Card>
-                    </TouchableOpacity>
+                        <Card style={{ minHeight: 100 }}>
+                            <CardItem>
+                                <Left>
+                                    <Body>
+                                        <Text>{this.props.selectedDeck.cards[0].back}</Text>
+                                    </Body>
+                                </Left>
+                            </CardItem>
+                        </Card>
+                    </FlipCard>
                 </Content>
             </Container>
         );
