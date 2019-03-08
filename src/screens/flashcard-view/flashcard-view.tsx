@@ -1,10 +1,10 @@
-import { Body, Card, CardItem, Container, Content, Left } from 'native-base';
+import { Body, Card, CardItem, Container, Content, DeckSwiper, Left } from 'native-base';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 import FlipCard from 'react-native-flip-card';
 
 import { Header } from '../../components';
-import { Deck } from '../../models';
+import { Deck, Flashcard } from '../../models';
 
 interface Props {
     selectedDeck?: Deck;
@@ -23,26 +23,31 @@ export class FlashcardView extends Component<Props> {
             <Container style={{ flex: 1 }}>
                 <Header>Flashcards</Header>
                 <Content style={{ flex: 1 }}>
-                    <FlipCard style={{ borderWidth: 0, elevation: 3, flex: 1 }}>
-                        <Card style={{ minHeight: 200 }}>
-                            <CardItem>
-                                <Left>
-                                    <Body>
-                                        <Text>{this.props.selectedDeck.cards[0].front}</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                        </Card>
-                        <Card style={{ minHeight: 200 }}>
-                            <CardItem>
-                                <Left>
-                                    <Body>
-                                        <Text>{this.props.selectedDeck.cards[0].back}</Text>
-                                    </Body>
-                                </Left>
-                            </CardItem>
-                        </Card>
-                    </FlipCard>
+                    <DeckSwiper
+                        dataSource={this.props.selectedDeck.cards}
+                        renderItem={(card: Flashcard) => (
+                            <FlipCard style={{ borderWidth: 0, elevation: 3, flex: 1 }}>
+                                <Card style={{ minHeight: 200 }}>
+                                    <CardItem>
+                                        <Left>
+                                            <Body>
+                                                <Text>{card.front}</Text>
+                                            </Body>
+                                        </Left>
+                                    </CardItem>
+                                </Card>
+                                <Card style={{ minHeight: 200 }}>
+                                    <CardItem>
+                                        <Left>
+                                            <Body>
+                                                <Text>{card.back}</Text>
+                                            </Body>
+                                        </Left>
+                                    </CardItem>
+                                </Card>
+                            </FlipCard>
+                        )}
+                    />
                 </Content>
             </Container>
         );
