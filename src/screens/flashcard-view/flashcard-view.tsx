@@ -1,11 +1,15 @@
 import { Body, Card, CardItem, Container, Content, Header, Left, Title } from 'native-base';
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 
 import { Deck } from '../../models';
+import { FlipFlashcardAction } from '../../store/decks';
 
 interface Props {
     selectedDeck?: Deck;
+    displayAnswer: boolean;
+
+    flipFlashcard: () => FlipFlashcardAction;
 }
 
 export class FlashcardView extends Component<Props> {
@@ -25,15 +29,21 @@ export class FlashcardView extends Component<Props> {
                     </Body>
                 </Header>
                 <Content>
-                    <Card style={{ elevation: 3 }}>
-                        <CardItem>
-                            <Left>
-                                <Body>
-                                    <Text>{this.props.selectedDeck.cards[0].front}</Text>
-                                </Body>
-                            </Left>
-                        </CardItem>
-                    </Card>
+                    <TouchableOpacity onPress={this.props.flipFlashcard}>
+                        <Card style={{ elevation: 3 }}>
+                            <CardItem>
+                                <Left>
+                                    <Body>
+                                        <Text>
+                                            {this.props.displayAnswer
+                                                ? this.props.selectedDeck.cards[0].back
+                                                : this.props.selectedDeck.cards[0].front}
+                                        </Text>
+                                    </Body>
+                                </Left>
+                            </CardItem>
+                        </Card>
+                    </TouchableOpacity>
                 </Content>
             </Container>
         );

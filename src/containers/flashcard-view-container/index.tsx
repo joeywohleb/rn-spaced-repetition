@@ -4,9 +4,13 @@ import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
 import { FlashcardView } from '../../screens';
+import { flipFlashcard, FlipFlashcardAction } from '../../store/decks';
 
 interface Props {
     selectedDeck?: Deck;
+    displayAnswer: boolean;
+
+    flipFlashcard: () => FlipFlashcardAction;
 }
 
 class FlashcardViewContainer extends Component<Props> {
@@ -23,7 +27,14 @@ export default connect(
     (state: AppState) => {
         return {
             selectedDeck: state.decks.selectedDeck,
+            displayAnswer: state.decks.displayAnswer,
         };
     },
-    (dispatch: Dispatch<Action<AppState>>) => bindActionCreators({}, dispatch),
+    (dispatch: Dispatch<Action<AppState>>) =>
+        bindActionCreators(
+            {
+                flipFlashcard,
+            },
+            dispatch,
+        ),
 )(FlashcardViewContainer);

@@ -4,7 +4,12 @@ import { SetDecksAction } from '.';
 import defaultSets from '../../assets/json/default-set.json';
 import { Deck, Flashcard } from '../../models';
 import { NavigationService } from '../../services';
-import { decksActionTypes as ActionTypes, SetSelectedDeckAction, SetSelectedFlashcardAction } from './action-types';
+import {
+    decksActionTypes as ActionTypes,
+    FlipFlashcardAction,
+    SetSelectedDeckAction,
+    SetSelectedFlashcardAction,
+} from './action-types';
 
 export const setDecks = (payload: Deck[]): SetDecksAction => ({
     type: ActionTypes.SET_DECKS,
@@ -19,6 +24,10 @@ export const setSelectedDeck = (payload: Deck): SetSelectedDeckAction => ({
 export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAction => ({
     type: ActionTypes.SET_SELECTED_FLASHCARD,
     payload,
+});
+
+export const flipFlashcard = (): FlipFlashcardAction => ({
+    type: ActionTypes.FLIP_FLASHCARD,
 });
 
 export const loadDecks = () => {
