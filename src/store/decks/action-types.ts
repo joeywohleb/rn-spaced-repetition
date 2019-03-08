@@ -6,7 +6,6 @@ export const decksActionTypes = {
     SET_DECKS: `${ns}:SET_FLASHCARD_SETS`,
     SET_SELECTED_DECK: `${ns}:SET_SELECTED_DECK`,
     SET_SELECTED_FLASHCARD: `${ns}:SET_SELCTED_FLASHCARD`,
-    FLIP_FLASHCARD: `${ns}:FLIP_FLASHCARD`,
 };
 
 export interface SetDecksAction {
@@ -24,12 +23,4 @@ export interface SetSelectedFlashcardAction {
     payload: Flashcard;
 }
 
-export interface FlipFlashcardAction {
-    type: typeof decksActionTypes.FLIP_FLASHCARD;
-}
-
-export type DecksActionTypes =
-    | SetDecksAction
-    | SetSelectedDeckAction
-    | SetSelectedFlashcardAction
-    | FlipFlashcardAction;
+export type DecksActionTypes = SetDecksAction | SetSelectedDeckAction | SetSelectedFlashcardAction;

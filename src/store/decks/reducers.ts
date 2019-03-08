@@ -5,7 +5,6 @@ const initialState: DecksAppState = {
     decks: [],
     selectedDeck: undefined,
     selectedFlashcard: undefined,
-    displayAnswer: false,
 };
 
 export const decksReducer = (state: DecksAppState = initialState, action: any): DecksAppState => {
@@ -28,11 +27,6 @@ export const decksReducer = (state: DecksAppState = initialState, action: any): 
                 selectedFlashcard: {
                     ...action.payload,
                 },
-            };
-        case ActionTypes.FLIP_FLASHCARD:
-            return {
-                ...state,
-                displayAnswer: !state.displayAnswer,
             };
         default:
             return state;
