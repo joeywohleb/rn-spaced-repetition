@@ -16,8 +16,13 @@ const navigateTo = (routeName: NavigationRoutes, params?: NavigationParams) => {
     );
 };
 
+const goBack = () => {
+    navigator.dispatch(NavigationActions.back());
+};
+
 // tslint:disable-next-line: variable-name
 export const NavigationService = {
+    goBack,
     navigateTo,
     setTopLevelNavigator,
 };
