@@ -25,7 +25,7 @@ export class Home extends Component<Props> {
     public render() {
         return (
             <Container>
-                <Header>Home</Header>
+                <Header headerLeft={null}>Home</Header>
                 <Content>
                     <List>
                         {this.props.decks.map((d: Deck) => (
