@@ -24,7 +24,7 @@ export class FlashcardView extends Component<Props> {
                 <Header>Flashcards</Header>
                 <Content style={{ flex: 1 }}>
                     <FlipCard style={{ borderWidth: 0, elevation: 3, flex: 1 }}>
-                        <Card style={{ minHeight: 100 }}>
+                        <Card style={{ minHeight: 200 }}>
                             <CardItem>
                                 <Left>
                                     <Body>
@@ -33,7 +33,7 @@ export class FlashcardView extends Component<Props> {
                                 </Left>
                             </CardItem>
                         </Card>
-                        <Card style={{ minHeight: 100 }}>
+                        <Card style={{ minHeight: 200 }}>
                             <CardItem>
                                 <Left>
                                     <Body>
