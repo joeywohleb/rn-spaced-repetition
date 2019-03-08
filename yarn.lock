@@ -751,6 +751,14 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.0.tgz#4c48fed958d6dcf9487195a0ef6456d5f6e0163a"
   integrity sha512-eItQyV43bj4rR3JPV0Skpl1SncRCdziTEK9/v8VwXmV6d/qOUO8/EuWeHBbCZcsfSHfzI5UyMJLCSXtxxznyZg==
 
+"@types/react-native-flip-card@3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@types/react-native-flip-card/-/react-native-flip-card-3.5.0.tgz#db2197b5ba541ba92a0c79419bb526e3688b8a02"
+  integrity sha512-LpAW10dWJbS6TIi7wKvG3zi5MVvL3zt1MFoAqQVclNM/21oWAcePxd9lxE2UZuQV71Snt5HmUHKgTkxGj49VYQ==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*", "@types/react-native@0.57.38":
   version "0.57.38"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.57.38.tgz#2ff6ed1a7cc207afbfd87bf496513d96931d1446"
@@ -5013,6 +5021,13 @@ react-native-easy-grid@0.2.1:
   integrity sha512-u90U4lf5L/PUmq7HoczFKgyElmBCpb3gu21TOWL7pq4gSH2Hz0EGm1Bgu0SQacO9v6jfQbS7JfE+xtMg6MHluQ==
   dependencies:
     lodash "4.17.11"
+
+react-native-flip-card@3.5.2:
+  version "3.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-flip-card/-/react-native-flip-card-3.5.2.tgz#6563f4a6d95b999c21e82deec9b2f502175847d6"
+  integrity sha512-ftmm9xNbLJb40bmTc9buGbrKlfMiojJJfV4iZZgb68rFM3IPnmUvihGqlvBgjw4CWuLXMkTyz/LhdDlZu5hG1A==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-gesture-handler@1.0.17, react-native-gesture-handler@~1.0.14:
   version "1.0.17"

@@ -1,7 +1,8 @@
-import { Body, Container, Content, Header, Icon, Left, List, ListItem, Right, Title } from 'native-base';
+import { Container, Content, Icon, Left, List, ListItem, Right } from 'native-base';
 import React, { Component } from 'react';
 import { Text } from 'react-native';
 
+import { Header } from '../../components';
 import { Deck } from '../../models';
 import { loadDecks, selectDeck } from '../../store/decks';
 
@@ -24,11 +25,7 @@ export class Home extends Component<Props> {
     public render() {
         return (
             <Container>
-                <Header>
-                    <Body>
-                        <Title>Home</Title>
-                    </Body>
-                </Header>
+                <Header>Home</Header>
                 <Content>
                     <List>
                         {this.props.decks.map((d: Deck) => (
