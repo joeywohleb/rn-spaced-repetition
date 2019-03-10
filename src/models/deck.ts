@@ -1,6 +1,8 @@
 import { Flashcard } from '.';
 
 export interface Deck {
+    id: string;
     name: string;
-    cards: Flashcard[];
+    dateCreated: Date;
+    flashcards: Flashcard[];
 }
