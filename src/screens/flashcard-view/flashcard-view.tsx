@@ -24,7 +24,7 @@ export class FlashcardView extends Component<Props> {
                 <Header>Flashcards</Header>
                 <Content style={{ flex: 1 }}>
                     <DeckSwiper
-                        dataSource={this.props.selectedDeck.cards}
+                        dataSource={this.props.selectedDeck.flashcards}
                         renderItem={(card: Flashcard) => (
                             <FlipCard style={{ borderWidth: 0, elevation: 3, flex: 1 }}>
                                 <Card style={{ minHeight: 200 }}>

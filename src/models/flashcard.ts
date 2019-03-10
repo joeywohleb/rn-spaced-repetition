@@ -5,5 +5,6 @@ export interface Flashcard {
     front: string;
     back: string;
     order: number;
-    history: ReviewHistory[];
+    dateCreated?: Date;
+    history?: ReviewHistory[];
 }

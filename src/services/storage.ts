@@ -2,7 +2,9 @@ import { AsyncStorage } from 'react-native';
 
 // tslint:disable: no-console
 
-const get = async <T>(key: string): Promise<T[]> => {
+type keys = 'decks';
+
+const get = async <T>(key: keys): Promise<T[]> => {
     try {
         const value: string | null = await AsyncStorage.getItem(key);
         if (value != null) {
@@ -14,15 +16,15 @@ const get = async <T>(key: string): Promise<T[]> => {
     return [];
 };
 
-const set = async <T>(key: string, value: T): Promise<void> => {
+const set = async (key: keys, value: any[]): Promise<void> => {
     try {
-        AsyncStorage.setItem(key, JSON.stringify(value));
+        return AsyncStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
         console.warn(error);
     }
 };
 
-const remove = async (key: string): Promise<void> => {
+const remove = async (key: keys): Promise<void> => {
     try {
         return AsyncStorage.removeItem(key);
     } catch (error) {

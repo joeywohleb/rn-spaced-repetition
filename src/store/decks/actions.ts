@@ -3,7 +3,7 @@ import { Dispatch } from 'redux';
 import { SetDecksAction } from '.';
 import defaultSets from '../../assets/json/default-set.json';
 import { Deck, Flashcard } from '../../models';
-import { NavigationService } from '../../services';
+import { NavigationService, StorageService } from '../../services';
 import { decksActionTypes as ActionTypes, SetSelectedDeckAction, SetSelectedFlashcardAction } from './action-types';
 
 export const setDecks = (payload: Deck[]): SetDecksAction => ({
@@ -23,8 +23,25 @@ export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAc
 
 export const loadDecks = () => {
     return async (dispatch: Dispatch<any>) => {
-        dispatch(setDecks(defaultSets));
+        await StorageService.remove('decks');
+        let decks: Deck[] = await StorageService.get<Deck>('decks');
+
+        if (decks.length === 0) {
+            decks = await createDefaultDeck();
+        }
+
+        dispatch(setDecks(decks));
     };
+};
+
+const createDefaultDeck = async (): Promise<Deck[]> => {
+    const decks = defaultSets.map((d: Deck) => ({
+        ...d,
+        dateCreated: new Date(),
+        flashcards: d.flashcards.map((f: Flashcard) => ({ ...f, dateCreated: new Date(), history: [] })),
+    }));
+    await StorageService.set('decks', decks);
+    return decks;
 };
 
 export const selectDeck = (deck: Deck) => {
