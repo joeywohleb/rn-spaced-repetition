@@ -36,7 +36,7 @@ const getKeys = async (): Promise<string[] | undefined> => {
     try {
         return AsyncStorage.getAllKeys();
     } catch (e) {
-        console.log(e);
+        console.warn(e);
     }
     return;
 };
