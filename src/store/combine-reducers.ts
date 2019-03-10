@@ -1,9 +1,7 @@
 import { combineReducers } from 'redux';
 
-import { setsReducer as sets } from './sets';
+import { decksReducer as decks } from './decks';
 
-const rootReducer = combineReducers({
-    sets,
+export default combineReducers({
+    decks,
 });
-
-export default rootReducer;

@@ -6,7 +6,9 @@
         "max-line-length": [true, 120],
         "import-name": false,
         "interface-name": false,
-        "object-literal-sort-keys": false
+        "object-literal-sort-keys": false,
+        "object-shorthand-properties-first": false,
+        "variable-name": false
     },
     "rulesDirectory": []
 }
