@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux';
+import uuid from 'uuid';
 
 import { SetDecksAction } from '.';
 import defaultSets from '../../assets/json/default-set.json';
@@ -35,10 +36,11 @@ export const loadDecks = () => {
 };
 
 const createDefaultDeck = async (): Promise<Deck[]> => {
-    const decks = defaultSets.map((d: Deck) => ({
+    const decks: Deck[] = (defaultSets as Deck[]).map((d: Deck) => ({
         ...d,
+        id: uuid(),
         dateCreated: new Date(),
-        flashcards: d.flashcards.map((f: Flashcard) => ({ ...f, dateCreated: new Date(), history: [] })),
+        flashcards: d.flashcards.map((f: Flashcard) => ({ ...f, id: uuid(), dateCreated: new Date(), history: [] })),
     }));
     await StorageService.set('decks', decks);
     return decks;
