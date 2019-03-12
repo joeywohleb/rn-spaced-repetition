@@ -39,7 +39,14 @@ const createDefaultDeck = async (): Promise<Deck[]> => {
         ...d,
         id: uuid(),
         dateCreated: new Date(),
-        flashcards: d.flashcards.map((f: Flashcard) => ({ ...f, id: uuid(), dateCreated: new Date(), history: [] })),
+        flashcards: d.flashcards.map((f: Flashcard) => ({
+            ...f,
+            id: uuid(),
+            dateCreated: new Date(),
+            history: [],
+            proficiency: 0,
+            nextViewDate: new Date(),
+        })),
     }));
     await StorageService.set('decks', decks);
     return decks;
