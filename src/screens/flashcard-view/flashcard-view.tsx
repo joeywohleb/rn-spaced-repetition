@@ -25,7 +25,7 @@ export class FlashcardView extends Component<Props> {
         return (
             <Container style={{ flex: 1 }}>
                 <Header>Flashcards</Header>
-                <Content style={{ flex: 1 }}>
+                <Content style={{ padding: 10 }}>
                     <DeckSwiper
                         dataSource={this.props.selectedDeck.flashcards}
                         onSwipeLeft={(card: Flashcard) => this.props.saveResponse(card.id, false)}
