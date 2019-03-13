@@ -11,6 +11,7 @@ import {
     SetInProgressFlashcardsAction,
     SetSelectedDeckAction,
     SetSelectedFlashcardAction,
+    ToggleFlipAction,
 } from './action-types';
 
 export const setDecks = (payload: Deck[]): SetDecksAction => ({
@@ -31,6 +32,10 @@ export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAc
 export const setInProgressFlashcards = (payload: Flashcard[]): SetInProgressFlashcardsAction => ({
     type: ActionTypes.SET_IN_PROGRESS_FLASHCARDS,
     payload,
+});
+
+export const toggleFlip = (): ToggleFlipAction => ({
+    type: ActionTypes.TOGGLE_FLIP,
 });
 
 export const loadDecks = () => {
@@ -118,7 +123,7 @@ export const findNextViewDate = (deck?: Deck) => {
     }
     let nextViewDate: Date = deck.flashcards[0].nextViewDate;
     deck.flashcards.forEach((f: Flashcard) => {
-        if (moment(nextViewDate).isAfter(f.nextViewDate)) {
+        if (moment(nextViewDate).isAfter(f.nextViewDate) && moment(f.nextViewDate).isAfter(moment())) {
             nextViewDate = f.nextViewDate;
         }
     });

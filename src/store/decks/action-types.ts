@@ -7,6 +7,7 @@ export const decksActionTypes = {
     SET_SELECTED_DECK: `${ns}:SET_SELECTED_DECK`,
     SET_SELECTED_FLASHCARD: `${ns}:SET_SELCTED_FLASHCARD`,
     SET_IN_PROGRESS_FLASHCARDS: `${ns}:SET_IN_PROGRESS_FLASHCARDS`,
+    TOGGLE_FLIP: `${ns}:TOGGLE_FLIP`,
 };
 
 export interface SetDecksAction {
@@ -29,8 +30,13 @@ export interface SetInProgressFlashcardsAction {
     payload: Flashcard[];
 }
 
+export interface ToggleFlipAction {
+    type: typeof decksActionTypes.TOGGLE_FLIP;
+}
+
 export type DecksActionTypes =
     | SetDecksAction
     | SetSelectedDeckAction
     | SetSelectedFlashcardAction
-    | SetInProgressFlashcardsAction;
+    | SetInProgressFlashcardsAction
+    | ToggleFlipAction;
