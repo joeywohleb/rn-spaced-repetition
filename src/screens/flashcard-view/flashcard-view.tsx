@@ -1,10 +1,10 @@
 import moment from 'moment';
-import { Body, Card, CardItem, Container, Content, DeckSwiper, Left } from 'native-base';
+import { Container, Content, DeckSwiper } from 'native-base';
 import React, { Component } from 'react';
 import { StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import FlipCard from 'react-native-flip-card';
 
-import { Header } from '../../components';
+import { Flashcard as FlashcardComponent, Header } from '../../components';
 import { Deck, Flashcard } from '../../models';
 import { findNextViewDate, saveResponse } from '../../store/decks';
 
@@ -32,24 +32,8 @@ export class FlashcardView extends Component<Props> {
                         onSwipeRight={(card: Flashcard) => this.props.saveResponse(card.id, true)}
                         renderItem={(card: Flashcard) => (
                             <FlipCard style={styles.flashcard}>
-                                <Card style={styles.card}>
-                                    <CardItem>
-                                        <Left>
-                                            <Body>
-                                                <Text>{card.front}</Text>
-                                            </Body>
-                                        </Left>
-                                    </CardItem>
-                                </Card>
-                                <Card style={styles.card}>
-                                    <CardItem>
-                                        <Left>
-                                            <Body>
-                                                <Text>{card.back}</Text>
-                                            </Body>
-                                        </Left>
-                                    </CardItem>
-                                </Card>
+                                <FlashcardComponent>{card.front}</FlashcardComponent>
+                                <FlashcardComponent>{card.back}</FlashcardComponent>
                             </FlipCard>
                         )}
                         renderEmpty={() => (

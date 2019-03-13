@@ -35,7 +35,6 @@ export const setInProgressFlashcards = (payload: Flashcard[]): SetInProgressFlas
 
 export const loadDecks = () => {
     return async (dispatch: Dispatch<any>) => {
-        await StorageService.remove('decks');
         let decks: Deck[] = await StorageService.get<Deck>('decks');
 
         if (decks.length === 0) {
