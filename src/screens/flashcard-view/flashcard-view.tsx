@@ -48,7 +48,8 @@ export class FlashcardView extends Component<Props> {
                         )}
                     />
                 </Content>
-                {this.deckSwiper && this.deckSwiper._root.state.lastCard ? null : (
+                {(this.deckSwiper && this.deckSwiper._root.state.lastCard) ||
+                this.props.inProgressFlashcards.length === 0 ? null : (
                     <Content>
                         <View style={styles.buttonGroup}>
                             <Button
