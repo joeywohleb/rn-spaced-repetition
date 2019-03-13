@@ -5,6 +5,7 @@ const initialState: DecksAppState = {
     decks: [],
     selectedDeck: undefined,
     selectedFlashcard: undefined,
+    inProgressFlashcards: [],
 };
 
 export const decksReducer = (state: DecksAppState = initialState, action: any): DecksAppState => {
@@ -27,6 +28,11 @@ export const decksReducer = (state: DecksAppState = initialState, action: any): 
                 selectedFlashcard: {
                     ...action.payload,
                 },
+            };
+        case ActionTypes.SET_IN_PROGRESS_FLASHCARDS:
+            return {
+                ...state,
+                inProgressFlashcards: [...action.payload],
             };
         default:
             return state;

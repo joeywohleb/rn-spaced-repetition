@@ -1,14 +1,16 @@
+import moment from 'moment';
 import { Body, Card, CardItem, Container, Content, DeckSwiper, Left } from 'native-base';
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, Text, TextStyle, ViewStyle } from 'react-native';
 import FlipCard from 'react-native-flip-card';
 
 import { Header } from '../../components';
 import { Deck, Flashcard } from '../../models';
-import { saveResponse } from '../../store/decks';
+import { findNextViewDate, saveResponse } from '../../store/decks';
 
 interface Props {
     selectedDeck?: Deck;
+    inProgressFlashcards: Flashcard[];
 
     saveResponse: typeof saveResponse;
 }
@@ -19,20 +21,18 @@ export class FlashcardView extends Component<Props> {
     }
 
     public render() {
-        if (!this.props.selectedDeck) {
-            return null;
-        }
         return (
-            <Container style={{ flex: 1 }}>
+            <Container style={styles.container}>
                 <Header>Flashcards</Header>
-                <Content style={{ padding: 10 }}>
+                <Content style={styles.content}>
                     <DeckSwiper
-                        dataSource={this.props.selectedDeck.flashcards}
+                        looping={false}
+                        dataSource={this.props.inProgressFlashcards}
                         onSwipeLeft={(card: Flashcard) => this.props.saveResponse(card.id, false)}
                         onSwipeRight={(card: Flashcard) => this.props.saveResponse(card.id, true)}
                         renderItem={(card: Flashcard) => (
-                            <FlipCard style={{ borderWidth: 0, elevation: 3, flex: 1 }}>
-                                <Card style={{ minHeight: 200 }}>
+                            <FlipCard style={styles.flashcard}>
+                                <Card style={styles.card}>
                                     <CardItem>
                                         <Left>
                                             <Body>
@@ -41,7 +41,7 @@ export class FlashcardView extends Component<Props> {
                                         </Left>
                                     </CardItem>
                                 </Card>
-                                <Card style={{ minHeight: 200 }}>
+                                <Card style={styles.card}>
                                     <CardItem>
                                         <Left>
                                             <Body>
@@ -52,9 +52,43 @@ export class FlashcardView extends Component<Props> {
                                 </Card>
                             </FlipCard>
                         )}
+                        renderEmpty={() => (
+                            <Text style={styles.emptyMessage}>
+                                All done! Next group ready {moment().to(findNextViewDate(this.props.selectedDeck))}.
+                            </Text>
+                        )}
                     />
                 </Content>
             </Container>
         );
     }
 }
+
+interface Styles {
+    card: ViewStyle;
+    container: ViewStyle;
+    content: ViewStyle;
+    emptyMessage: TextStyle;
+    flashcard: ViewStyle;
+}
+
+const styles = StyleSheet.create<Styles>({
+    card: {
+        minHeight: 200,
+    },
+    container: {
+        flex: 1,
+    },
+    content: {
+        padding: 10,
+    },
+    emptyMessage: {
+        padding: 10,
+        textAlign: 'center',
+    },
+    flashcard: {
+        borderWidth: 0,
+        elevation: 3,
+        flex: 1,
+    },
+});
