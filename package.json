@@ -7,9 +7,11 @@
         "android": "node node_modules/react-native/local-cli/cli.js run-android",
         "start": "node node_modules/react-native/local-cli/cli.js start",
         "test": "jest",
-        "typescript": "./node_modules/typescript/bin/tsc"
+        "typescript": "./node_modules/typescript/bin/tsc",
+        "typescript:watch": "./node_modules/typescript/bin/tsc --watch"
     },
     "dependencies": {
+        "moment": "2.24.0",
         "native-base": "2.12.1",
         "react": "16.8.4",
         "react-native": "0.58.6",

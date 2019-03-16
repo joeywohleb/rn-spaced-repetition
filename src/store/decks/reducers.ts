@@ -5,6 +5,8 @@ const initialState: DecksAppState = {
     decks: [],
     selectedDeck: undefined,
     selectedFlashcard: undefined,
+    inProgressFlashcards: [],
+    flip: false,
 };
 
 export const decksReducer = (state: DecksAppState = initialState, action: any): DecksAppState => {
@@ -27,6 +29,16 @@ export const decksReducer = (state: DecksAppState = initialState, action: any): 
                 selectedFlashcard: {
                     ...action.payload,
                 },
+            };
+        case ActionTypes.SET_IN_PROGRESS_FLASHCARDS:
+            return {
+                ...state,
+                inProgressFlashcards: [...action.payload],
+            };
+        case ActionTypes.TOGGLE_FLIP:
+            return {
+                ...state,
+                flip: !state.flip,
             };
         default:
             return state;

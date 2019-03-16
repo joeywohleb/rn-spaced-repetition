@@ -1,11 +1,18 @@
+import moment from 'moment';
 import { Dispatch } from 'redux';
 import uuid from 'uuid';
 
 import { SetDecksAction } from '.';
 import defaultSets from '../../assets/json/default-set.json';
-import { AppState, Deck, Flashcard } from '../../models';
+import { AppState, Deck, Flashcard, Proficiencies } from '../../models';
 import { NavigationService, StorageService } from '../../services';
-import { decksActionTypes as ActionTypes, SetSelectedDeckAction, SetSelectedFlashcardAction } from './action-types';
+import {
+    decksActionTypes as ActionTypes,
+    SetInProgressFlashcardsAction,
+    SetSelectedDeckAction,
+    SetSelectedFlashcardAction,
+    ToggleFlipAction,
+} from './action-types';
 
 export const setDecks = (payload: Deck[]): SetDecksAction => ({
     type: ActionTypes.SET_DECKS,
@@ -20,6 +27,15 @@ export const setSelectedDeck = (payload: Deck): SetSelectedDeckAction => ({
 export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAction => ({
     type: ActionTypes.SET_SELECTED_FLASHCARD,
     payload,
+});
+
+export const setInProgressFlashcards = (payload: Flashcard[]): SetInProgressFlashcardsAction => ({
+    type: ActionTypes.SET_IN_PROGRESS_FLASHCARDS,
+    payload,
+});
+
+export const toggleFlip = (): ToggleFlipAction => ({
+    type: ActionTypes.TOGGLE_FLIP,
 });
 
 export const loadDecks = () => {
@@ -38,8 +54,15 @@ const createDefaultDeck = async (): Promise<Deck[]> => {
     const decks: Deck[] = (defaultSets as Deck[]).map((d: Deck) => ({
         ...d,
         id: uuid(),
-        dateCreated: new Date(),
-        flashcards: d.flashcards.map((f: Flashcard) => ({ ...f, id: uuid(), dateCreated: new Date(), history: [] })),
+        dateCreated: moment().toDate(),
+        flashcards: d.flashcards.map((f: Flashcard) => ({
+            ...f,
+            id: uuid(),
+            dateCreated: moment().toDate(),
+            history: [],
+            proficiency: 0,
+            nextViewDate: moment().toDate(),
+        })),
     }));
     await StorageService.set('decks', decks);
     return decks;
@@ -48,13 +71,18 @@ const createDefaultDeck = async (): Promise<Deck[]> => {
 export const selectDeck = (deck: Deck) => {
     return async (dispatch: Dispatch<any>) => {
         await dispatch(setSelectedDeck(deck));
+        await dispatch(setInProgressFlashcards(filterReady(deck.flashcards)));
         NavigationService.navigateTo('FlashcardView');
     };
 };
 
+export const filterReady = (flashcards: Flashcard[]) => {
+    return [...flashcards.filter((f: Flashcard) => moment().isSameOrAfter(moment(f.nextViewDate)))];
+};
+
 export const saveResponse = (id: string, answeredCorrectly: boolean) => {
     return async (dispatch: Dispatch<any>, getState: () => AppState) => {
-        const { selectedDeck, decks } = getState().decks;
+        const { selectedDeck, decks, inProgressFlashcards } = getState().decks;
 
         if (!selectedDeck) {
             return;
@@ -62,14 +90,67 @@ export const saveResponse = (id: string, answeredCorrectly: boolean) => {
 
         const cardIndex = selectedDeck.flashcards.findIndex((f: Flashcard) => f.id === id);
 
-        selectedDeck.flashcards[cardIndex].history.push({ date: new Date(), answeredCorrectly });
+        const updatedFlashcard: Flashcard = updateProficiency(selectedDeck.flashcards[cardIndex], answeredCorrectly);
+
+        if (updatedFlashcard.proficiency === 0) {
+            inProgressFlashcards.push({ ...updatedFlashcard });
+            dispatch(setInProgressFlashcards(inProgressFlashcards));
+        }
+
+        const updatedDeck: Deck = {
+            ...selectedDeck,
+            flashcards: [
+                ...selectedDeck.flashcards.slice(0, cardIndex),
+                { ...updatedFlashcard },
+                ...selectedDeck.flashcards.slice(cardIndex + 1),
+            ],
+        };
 
         const deckIndex: number = decks.findIndex((d: Deck) => d.id === selectedDeck.id);
 
-        const updatedDecks: Deck[] = [...decks.slice(0, deckIndex), { ...selectedDeck }, ...decks.slice(deckIndex + 1)];
+        const updatedDecks: Deck[] = [...decks.slice(0, deckIndex), { ...updatedDeck }, ...decks.slice(deckIndex + 1)];
 
         await StorageService.set('decks', updatedDecks);
 
         dispatch(setDecks(updatedDecks));
+        dispatch(setSelectedDeck(updatedDeck));
     };
+};
+
+export const findNextViewDate = (deck?: Deck) => {
+    if (!deck) {
+        return;
+    }
+    let nextViewDate: Date = deck.flashcards[0].nextViewDate;
+    deck.flashcards.forEach((f: Flashcard) => {
+        if (moment(nextViewDate).isAfter(f.nextViewDate) && moment(f.nextViewDate).isAfter(moment())) {
+            nextViewDate = f.nextViewDate;
+        }
+    });
+    return nextViewDate;
+};
+
+const updateProficiency = (flashcard: Flashcard, answeredCorrectly: boolean): Flashcard => {
+    flashcard.history.push({ date: moment().toDate(), answeredCorrectly });
+
+    const minLevel = Proficiencies[0].level;
+    const maxLevel = Proficiencies[Proficiencies.length - 1].level;
+
+    if (answeredCorrectly) {
+        if (flashcard.proficiency < maxLevel) {
+            flashcard.proficiency += 1;
+        }
+    } else {
+        if (flashcard.proficiency > minLevel) {
+            flashcard.proficiency -= 1;
+        }
+    }
+
+    const { timeDuration, timeUnit } = Proficiencies[flashcard.proficiency];
+
+    flashcard.nextViewDate = moment(flashcard.nextViewDate)
+        .add(timeDuration, timeUnit)
+        .toDate();
+
+    return flashcard;
 };

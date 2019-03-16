@@ -1,4 +1,4 @@
-package com.spacedrepetition;
+package com.joeywohleb.spacedRepetition;
 
 import android.app.Application;
 

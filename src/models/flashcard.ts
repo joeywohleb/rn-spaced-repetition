@@ -7,5 +7,7 @@ export interface Flashcard {
     back: string;
     order: number;
     dateCreated: Date;
+    nextViewDate: Date;
+    proficiency: number;
     history: ReviewHistory[];
 }
