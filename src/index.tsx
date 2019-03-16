@@ -24,6 +24,10 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     {
         initialRouteName: 'Home',
         headerMode: 'none',
+        navigationOptions: {
+            gesturesEnabled: false,
+            swipeEnabled: false,
+        },
     },
 );
 
