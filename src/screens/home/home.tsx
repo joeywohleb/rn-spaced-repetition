@@ -4,6 +4,7 @@ import { Text } from 'react-native';
 
 import { Header } from '../../components';
 import { Deck } from '../../models';
+import { NavigationService } from '../../services';
 import { loadDecks, selectDeck } from '../../store/decks';
 
 interface Props {
@@ -38,6 +39,15 @@ export class Home extends Component<Props> {
                                 </Right>
                             </ListItem>
                         ))}
+
+                        <ListItem onPress={() => NavigationService.navigateTo('AccountSignup')}>
+                            <Left>
+                                <Text>Create Account</Text>
+                            </Left>
+                            <Right>
+                                <Icon name="arrow-forward" />
+                            </Right>
+                        </ListItem>
                     </List>
                 </Content>
             </Container>
