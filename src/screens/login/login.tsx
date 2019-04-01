@@ -11,7 +11,7 @@ interface State {
     password: string;
 }
 
-export class AccountSignup extends Component<Props, State> {
+export class Login extends Component<Props, State> {
     public constructor(props: Props) {
         super(props);
 
@@ -31,7 +31,7 @@ export class AccountSignup extends Component<Props, State> {
                         </Button>
                     }
                 >
-                    Signup
+                    Login
                 </Header>
                 <Content>
                     <Form>
@@ -57,7 +57,7 @@ export class AccountSignup extends Component<Props, State> {
     }
 
     private registerUser = async () => {
-        const response = await fetch('https://spaced-repetition-api.joeywohleb.com/register', {
+        const response = await fetch('https://spaced-repetition-api.joeywohleb.com/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -76,11 +76,20 @@ export class AccountSignup extends Component<Props, State> {
             });
             return;
         }
+        const result = await response.json();
 
-        Toast.show({
-            text: 'Account created!',
-            buttonText: 'Okay',
-        });
+        if (result.token) {
+            Toast.show({
+                text: 'Login successful!',
+                buttonText: 'Okay',
+            });
+        } else {
+            Toast.show({
+                text: 'Incorrect email or password',
+                buttonText: 'Okay',
+            });
+            return;
+        }
         NavigationService.goBack();
     };
 }

@@ -48,6 +48,15 @@ export class Home extends Component<Props> {
                                 <Icon name="arrow-forward" />
                             </Right>
                         </ListItem>
+
+                        <ListItem onPress={() => NavigationService.navigateTo('Login')}>
+                            <Left>
+                                <Text>Login</Text>
+                            </Left>
+                            <Right>
+                                <Icon name="arrow-forward" />
+                            </Right>
+                        </ListItem>
                     </List>
                 </Content>
             </Container>

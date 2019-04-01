@@ -14,6 +14,7 @@ import { name as appName } from '../app.json';
 import AccountSignupContainer from './containers/account-signup';
 import FlashcardViewContainer from './containers/flashcard-view-container';
 import HomeContainer from './containers/home-container';
+import LoginContainer from './containers/login-container';
 import { NavigationService } from './services';
 
 const store = configureStore();
@@ -23,6 +24,7 @@ const AppNavigator: NavigationContainer = createStackNavigator(
         Home: HomeContainer,
         FlashcardView: FlashcardViewContainer,
         AccountSignup: AccountSignupContainer,
+        Login: LoginContainer,
     },
     {
         initialRouteName: 'Home',
@@ -34,7 +36,7 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     },
 );
 
-export type NavigationRoutes = 'Home' | 'FlashcardView' | 'AccountSignup';
+export type NavigationRoutes = 'Home' | 'FlashcardView' | 'AccountSignup' | 'Login';
 
 const AppContainer: NavigationContainer = createAppContainer(AppNavigator);
 
