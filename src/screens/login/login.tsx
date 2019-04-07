@@ -1,4 +1,4 @@
-import { Button, Container, Content, Form, Input, Item, Text, Toast } from 'native-base';
+import { Button, Container, Content, Footer, Form, Input, Item, Text, Toast } from 'native-base';
 import React, { Component } from 'react';
 
 import { Header } from '../../components';
@@ -52,6 +52,11 @@ export class Login extends Component<Props, State> {
                         </Item>
                     </Form>
                 </Content>
+                <Footer>
+                    <Button hasText transparent onPress={() => NavigationService.navigateTo('AccountSignup')}>
+                        <Text>Register</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }
