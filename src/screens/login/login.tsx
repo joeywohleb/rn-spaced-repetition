@@ -1,4 +1,4 @@
-import { Button, Container, Content, Form, Input, Item, Text, Toast } from 'native-base';
+import { Button, Container, Content, Footer, Form, Input, Item, Label, Text, Toast } from 'native-base';
 import React, { Component } from 'react';
 
 import { Header } from '../../components';
@@ -35,23 +35,28 @@ export class Login extends Component<Props, State> {
                 </Header>
                 <Content>
                     <Form>
-                        <Item>
+                        <Item floatingLabel>
+                            <Label>Email Address</Label>
                             <Input
-                                placeholder="Email Address"
                                 onChangeText={(email: string) => this.setState({ email })}
                                 value={this.state.email}
                             />
                         </Item>
-                        <Item last>
+                        <Item floatingLabel last>
+                            <Label>Password</Label>
                             <Input
                                 secureTextEntry={true}
-                                placeholder="Password"
                                 onChangeText={(password: string) => this.setState({ password })}
                                 value={this.state.password}
                             />
                         </Item>
                     </Form>
                 </Content>
+                <Footer>
+                    <Button hasText transparent onPress={() => NavigationService.navigateTo('AccountSignup')}>
+                        <Text>Register</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }

@@ -1,17 +1,17 @@
-import { Container, Content, Icon, Left, List, ListItem, Right } from 'native-base';
+import { Button, Container, Content, Footer, Icon, Left, List, ListItem, Right, Text } from 'native-base';
 import React, { Component } from 'react';
-import { Text } from 'react-native';
 
 import { Header } from '../../components';
 import { Deck } from '../../models';
 import { NavigationService } from '../../services';
-import { loadDecks, selectDeck } from '../../store/decks';
+import { createDeck, loadDecks, selectDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
 
     loadDecks: typeof loadDecks;
     selectDeck: typeof selectDeck;
+    createDeck: typeof createDeck;
 }
 
 export class Home extends Component<Props> {
@@ -26,7 +26,16 @@ export class Home extends Component<Props> {
     public render() {
         return (
             <Container>
-                <Header headerLeft={null}>Home</Header>
+                <Header
+                    headerLeft={null}
+                    headerRight={
+                        <Button hasText transparent onPress={() => NavigationService.navigateTo('Login')}>
+                            <Text>Login</Text>
+                        </Button>
+                    }
+                >
+                    Home
+                </Header>
                 <Content>
                     <List>
                         {this.props.decks.map((d: Deck) => (
@@ -39,26 +48,13 @@ export class Home extends Component<Props> {
                                 </Right>
                             </ListItem>
                         ))}
-
-                        <ListItem onPress={() => NavigationService.navigateTo('AccountSignup')}>
-                            <Left>
-                                <Text>Create Account</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="arrow-forward" />
-                            </Right>
-                        </ListItem>
-
-                        <ListItem onPress={() => NavigationService.navigateTo('Login')}>
-                            <Left>
-                                <Text>Login</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="arrow-forward" />
-                            </Right>
-                        </ListItem>
                     </List>
                 </Content>
+                <Footer>
+                    <Button hasText transparent onPress={this.props.createDeck}>
+                        <Text>Create Deck</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }

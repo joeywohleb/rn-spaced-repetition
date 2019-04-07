@@ -12,6 +12,7 @@ import {
 } from 'react-navigation';
 import { name as appName } from '../app.json';
 import AccountSignupContainer from './containers/account-signup';
+import CreateDeckContainer from './containers/create-deck-container';
 import FlashcardViewContainer from './containers/flashcard-view-container';
 import HomeContainer from './containers/home-container';
 import LoginContainer from './containers/login-container';
@@ -22,6 +23,7 @@ const store = configureStore();
 const AppNavigator: NavigationContainer = createStackNavigator(
     {
         Home: HomeContainer,
+        CreateDeck: CreateDeckContainer,
         FlashcardView: FlashcardViewContainer,
         AccountSignup: AccountSignupContainer,
         Login: LoginContainer,
@@ -36,7 +38,7 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     },
 );
 
-export type NavigationRoutes = 'Home' | 'FlashcardView' | 'AccountSignup' | 'Login';
+export type NavigationRoutes = 'Home' | 'CreateDeck' | 'FlashcardView' | 'AccountSignup' | 'Login';
 
 const AppContainer: NavigationContainer = createAppContainer(AppNavigator);
 
