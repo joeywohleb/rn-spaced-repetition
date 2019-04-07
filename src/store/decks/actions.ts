@@ -24,6 +24,11 @@ export const setSelectedDeck = (payload: Deck): SetSelectedDeckAction => ({
     payload,
 });
 
+export const setWorkingDeck = (payload: Deck): SetSelectedDeckAction => ({
+    type: ActionTypes.SET_WORKING_DECK,
+    payload,
+});
+
 export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAction => ({
     type: ActionTypes.SET_SELECTED_FLASHCARD,
     payload,
@@ -47,6 +52,33 @@ export const loadDecks = () => {
         }
 
         dispatch(setDecks(decks));
+    };
+};
+
+export const createDeck = () => {
+    return async (dispatch: Dispatch<any>) => {
+        const deck: Deck = {
+            id: uuid(),
+            dateCreated: moment().toDate(),
+            name: '',
+            flashcards: [],
+        };
+
+        await dispatch(setWorkingDeck(deck));
+        NavigationService.navigateTo('CreateDeck');
+    };
+};
+
+export const saveDeck = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        let { decks } = getState().decks;
+        const { workingDeck } = getState().decks;
+
+        decks = [...decks, workingDeck as Deck];
+
+        await StorageService.set('decks', decks);
+        await dispatch(setDecks(decks));
+        NavigationService.goBack();
     };
 };
 
@@ -76,7 +108,7 @@ export const selectDeck = (deck: Deck) => {
     };
 };
 
-export const filterReady = (flashcards: Flashcard[]) => {
+const filterReady = (flashcards: Flashcard[]) => {
     return [...flashcards.filter((f: Flashcard) => moment().isSameOrAfter(moment(f.nextViewDate)))];
 };
 

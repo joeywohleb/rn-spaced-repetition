@@ -4,13 +4,14 @@ import React, { Component } from 'react';
 import { Header } from '../../components';
 import { Deck } from '../../models';
 import { NavigationService } from '../../services';
-import { loadDecks, selectDeck } from '../../store/decks';
+import { createDeck, loadDecks, selectDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
 
     loadDecks: typeof loadDecks;
     selectDeck: typeof selectDeck;
+    createDeck: typeof createDeck;
 }
 
 export class Home extends Component<Props> {
@@ -50,8 +51,8 @@ export class Home extends Component<Props> {
                     </List>
                 </Content>
                 <Footer>
-                    <Button hasText transparent>
-                        <Text>Create Set</Text>
+                    <Button hasText transparent onPress={this.props.createDeck}>
+                        <Text>Create Deck</Text>
                     </Button>
                 </Footer>
             </Container>

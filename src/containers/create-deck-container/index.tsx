@@ -3,40 +3,38 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { Home } from '../../screens';
-import { createDeck, loadDecks, selectDeck } from '../../store/decks';
+import { CreateDeck } from '../../screens';
+import { saveDeck, setWorkingDeck } from '../../store/decks';
 
 interface Props {
-    decks: Deck[];
+    workingDeck?: Deck;
 
-    createDeck: typeof createDeck;
-    loadDecks: typeof loadDecks;
-    selectDeck: typeof selectDeck;
+    saveDeck: typeof saveDeck;
+    setWorkingDeck: typeof setWorkingDeck;
 }
 
-class HomeContainer extends Component<Props> {
+class CreateDeckContainer extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
 
     public render() {
-        return <Home {...this.props} />;
+        return <CreateDeck {...this.props} />;
     }
 }
 
 export default connect(
     (state: AppState) => {
         return {
-            decks: state.decks.decks,
+            workingDeck: state.decks.workingDeck,
         };
     },
     (dispatch: Dispatch<Action<AppState>>) =>
         bindActionCreators(
             {
-                createDeck,
-                loadDecks,
-                selectDeck,
+                saveDeck,
+                setWorkingDeck,
             },
             dispatch,
         ),
-)(HomeContainer);
+)(CreateDeckContainer);
