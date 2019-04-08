@@ -3,18 +3,17 @@ import React, { Component } from 'react';
 
 import { Header } from '../../components';
 import { Deck } from '../../models';
-import { NavigationService } from '../../services';
-import { createDeck, loadDecks, selectDeck } from '../../store/decks';
+import { createDeck, loadDecks, selectWorkingDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
 
     loadDecks: typeof loadDecks;
-    selectDeck: typeof selectDeck;
+    selectWorkingDeck: typeof selectWorkingDeck;
     createDeck: typeof createDeck;
 }
 
-export class Home extends Component<Props> {
+export class ManageDecks extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
@@ -26,20 +25,11 @@ export class Home extends Component<Props> {
     public render() {
         return (
             <Container>
-                <Header
-                    headerLeft={null}
-                    headerRight={
-                        <Button hasText transparent onPress={() => NavigationService.navigateTo('Login')}>
-                            <Text>Login</Text>
-                        </Button>
-                    }
-                >
-                    Home
-                </Header>
+                <Header>Decks</Header>
                 <Content>
                     <List>
                         {this.props.decks.map((d: Deck) => (
-                            <ListItem key={d.id} onPress={() => this.props.selectDeck(d)}>
+                            <ListItem key={d.id} onPress={() => this.props.selectWorkingDeck(d)}>
                                 <Left>
                                     <Text>{d.name}</Text>
                                 </Left>
@@ -51,8 +41,8 @@ export class Home extends Component<Props> {
                     </List>
                 </Content>
                 <Footer>
-                    <Button hasText transparent onPress={() => NavigationService.navigateTo('ManageDecks')}>
-                        <Text>Manage Decks</Text>
+                    <Button hasText transparent onPress={this.props.createDeck}>
+                        <Text>Create Deck</Text>
                     </Button>
                 </Footer>
             </Container>

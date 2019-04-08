@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { Home } from '../../screens';
 import { createDeck, loadDecks, selectDeck } from '../../store/decks';
+import { Home } from './home';
 
 interface Props {
     decks: Deck[];
@@ -14,7 +14,7 @@ interface Props {
     selectDeck: typeof selectDeck;
 }
 
-class HomeContainer extends Component<Props> {
+class HomeScreen extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
@@ -24,7 +24,7 @@ class HomeContainer extends Component<Props> {
     }
 }
 
-export default connect(
+export const HomeContainer = connect(
     (state: AppState) => {
         return {
             decks: state.decks.decks,
@@ -39,4 +39,4 @@ export default connect(
             },
             dispatch,
         ),
-)(HomeContainer);
+)(HomeScreen);

@@ -3,27 +3,26 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { CreateDeck } from '../../screens';
-import { saveDeck, setWorkingDeck } from '../../store/decks';
+import { createFlashcard } from '../../store/decks';
+import { ManageFlashcards } from './manage-flashcards';
 
 interface Props {
     workingDeck?: Deck;
 
-    saveDeck: typeof saveDeck;
-    setWorkingDeck: typeof setWorkingDeck;
+    createFlashcard: typeof createFlashcard;
 }
 
-class CreateDeckContainer extends Component<Props> {
+class ManageFlashcardsScreen extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
 
     public render() {
-        return <CreateDeck {...this.props} />;
+        return <ManageFlashcards {...this.props} />;
     }
 }
 
-export default connect(
+export const ManageFlashcardsContainer = connect(
     (state: AppState) => {
         return {
             workingDeck: state.decks.workingDeck,
@@ -32,9 +31,8 @@ export default connect(
     (dispatch: Dispatch<Action<AppState>>) =>
         bindActionCreators(
             {
-                saveDeck,
-                setWorkingDeck,
+                createFlashcard,
             },
             dispatch,
         ),
-)(CreateDeckContainer);
+)(ManageFlashcardsScreen);
