@@ -3,38 +3,36 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { Home } from '../../screens';
-import { loadDecks, selectDeck } from '../../store/decks';
+import { createFlashcard } from '../../store/decks';
+import { ManageFlashcards } from './manage-flashcards';
 
 interface Props {
-    decks: Deck[];
+    workingDeck?: Deck;
 
-    loadDecks: typeof loadDecks;
-    selectDeck: typeof selectDeck;
+    createFlashcard: typeof createFlashcard;
 }
 
-class HomeContainer extends Component<Props> {
+class ManageFlashcardsScreen extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
 
     public render() {
-        return <Home {...this.props} />;
+        return <ManageFlashcards {...this.props} />;
     }
 }
 
-export default connect(
+export const ManageFlashcardsContainer = connect(
     (state: AppState) => {
         return {
-            decks: state.decks.decks,
+            workingDeck: state.decks.workingDeck,
         };
     },
     (dispatch: Dispatch<Action<AppState>>) =>
         bindActionCreators(
             {
-                loadDecks,
-                selectDeck,
+                createFlashcard,
             },
             dispatch,
         ),
-)(HomeContainer);
+)(ManageFlashcardsScreen);

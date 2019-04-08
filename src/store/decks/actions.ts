@@ -11,6 +11,8 @@ import {
     SetInProgressFlashcardsAction,
     SetSelectedDeckAction,
     SetSelectedFlashcardAction,
+    SetWorkingDeckAction,
+    SetWorkingFlashcardAction,
     ToggleFlipAction,
 } from './action-types';
 
@@ -24,8 +26,18 @@ export const setSelectedDeck = (payload: Deck): SetSelectedDeckAction => ({
     payload,
 });
 
+export const setWorkingDeck = (payload: Deck): SetWorkingDeckAction => ({
+    type: ActionTypes.SET_WORKING_DECK,
+    payload,
+});
+
 export const setSelectedFlashcard = (payload: Flashcard): SetSelectedFlashcardAction => ({
     type: ActionTypes.SET_SELECTED_FLASHCARD,
+    payload,
+});
+
+export const setWorkingFlashcard = (payload: Flashcard): SetWorkingFlashcardAction => ({
+    type: ActionTypes.SET_WORKING_FLASHCARD,
     payload,
 });
 
@@ -47,6 +59,33 @@ export const loadDecks = () => {
         }
 
         dispatch(setDecks(decks));
+    };
+};
+
+export const createDeck = () => {
+    return async (dispatch: Dispatch<any>) => {
+        const deck: Deck = {
+            id: uuid(),
+            dateCreated: moment().toDate(),
+            name: '',
+            flashcards: [],
+        };
+
+        await dispatch(setWorkingDeck(deck));
+        NavigationService.navigateTo('CreateDeck');
+    };
+};
+
+export const saveDeck = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        let { decks } = getState().decks;
+        const { workingDeck } = getState().decks;
+
+        decks = [...decks, workingDeck as Deck];
+
+        await StorageService.set('decks', decks);
+        await dispatch(setDecks(decks));
+        NavigationService.goBack();
     };
 };
 
@@ -76,7 +115,58 @@ export const selectDeck = (deck: Deck) => {
     };
 };
 
-export const filterReady = (flashcards: Flashcard[]) => {
+export const selectWorkingDeck = (deck: Deck) => {
+    return async (dispatch: Dispatch<any>) => {
+        await dispatch(setWorkingDeck(deck));
+        NavigationService.navigateTo('ManageFlashcards');
+    };
+};
+
+export const createFlashcard = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { workingDeck } = getState().decks;
+
+        const card: Flashcard = {
+            id: uuid(),
+            dateCreated: moment().toDate(),
+            nextViewDate: moment().toDate(),
+            name: '',
+            front: '',
+            back: '',
+            order: ((workingDeck || { flashcards: [] }).flashcards || []).length,
+            proficiency: 0,
+            history: [],
+        };
+
+        await dispatch(setWorkingFlashcard(card));
+        NavigationService.navigateTo('CreateFlashcard');
+    };
+};
+
+export const saveFlashcard = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        let { decks, workingDeck } = getState().decks;
+        const { workingFlashcard } = getState().decks;
+
+        const flashcards: Flashcard[] = (workingDeck as Deck).flashcards;
+
+        workingDeck = {
+            ...(workingDeck as Deck),
+            flashcards: [...flashcards, workingFlashcard as Flashcard],
+        };
+
+        const deckIndex: number = decks.findIndex((d: Deck) => d.id === (workingDeck as Deck).id);
+
+        const updatedDecks: Deck[] = [...decks.slice(0, deckIndex), { ...workingDeck }, ...decks.slice(deckIndex + 1)];
+
+        await StorageService.set('decks', updatedDecks);
+        await dispatch(setDecks(updatedDecks));
+        await dispatch(setWorkingDeck(workingDeck));
+        NavigationService.goBack();
+    };
+};
+
+const filterReady = (flashcards: Flashcard[]) => {
     return [...flashcards.filter((f: Flashcard) => moment().isSameOrAfter(moment(f.nextViewDate)))];
 };
 
@@ -118,7 +208,7 @@ export const saveResponse = (id: string, answeredCorrectly: boolean) => {
 };
 
 export const findNextViewDate = (deck?: Deck) => {
-    if (!deck) {
+    if (!deck || deck.flashcards.length === 0) {
         return;
     }
     let nextViewDate: Date = deck.flashcards[0].nextViewDate;

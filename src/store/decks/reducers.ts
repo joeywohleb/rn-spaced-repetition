@@ -4,7 +4,9 @@ import { DecksAppState } from './state';
 const initialState: DecksAppState = {
     decks: [],
     selectedDeck: undefined,
+    workingDeck: undefined,
     selectedFlashcard: undefined,
+    workingFlashcard: undefined,
     inProgressFlashcards: [],
     flip: false,
 };
@@ -23,10 +25,24 @@ export const decksReducer = (state: DecksAppState = initialState, action: any): 
                     ...action.payload,
                 },
             };
+        case ActionTypes.SET_WORKING_DECK:
+            return {
+                ...state,
+                workingDeck: {
+                    ...action.payload,
+                },
+            };
         case ActionTypes.SET_SELECTED_FLASHCARD:
             return {
                 ...state,
                 selectedFlashcard: {
+                    ...action.payload,
+                },
+            };
+        case ActionTypes.SET_WORKING_FLASHCARD:
+            return {
+                ...state,
+                workingFlashcard: {
                     ...action.payload,
                 },
             };
