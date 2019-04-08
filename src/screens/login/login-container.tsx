@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState } from '../../models';
-import { Login } from '../../screens';
+import { Login } from './login';
 
 interface Props {}
 
-class LoginContainer extends Component<Props> {
+class LoginScreen extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
@@ -17,9 +17,9 @@ class LoginContainer extends Component<Props> {
     }
 }
 
-export default connect(
+export const LoginContainer = connect(
     () => {
         return {};
     },
     (dispatch: Dispatch<Action<AppState>>) => bindActionCreators({}, dispatch),
-)(LoginContainer);
+)(LoginScreen);

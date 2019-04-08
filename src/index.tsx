@@ -11,11 +11,16 @@ import {
     NavigationContainerComponent,
 } from 'react-navigation';
 import { name as appName } from '../app.json';
-import AccountSignupContainer from './containers/account-signup';
-import CreateDeckContainer from './containers/create-deck-container';
-import FlashcardViewContainer from './containers/flashcard-view-container';
-import HomeContainer from './containers/home-container';
-import LoginContainer from './containers/login-container';
+import {
+    AccountSignupContainer,
+    CreateDeckContainer,
+    CreateFlashcardContainer,
+    FlashcardViewContainer,
+    HomeContainer,
+    LoginContainer,
+    ManageDecksContainer,
+    ManageFlashcardsContainer,
+} from './screens';
 import { NavigationService } from './services';
 
 const store = configureStore();
@@ -24,9 +29,12 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     {
         Home: HomeContainer,
         CreateDeck: CreateDeckContainer,
+        CreateFlashcard: CreateFlashcardContainer,
         FlashcardView: FlashcardViewContainer,
         AccountSignup: AccountSignupContainer,
         Login: LoginContainer,
+        ManageDecks: ManageDecksContainer,
+        ManageFlashcards: ManageFlashcardsContainer,
     },
     {
         initialRouteName: 'Home',
@@ -38,7 +46,15 @@ const AppNavigator: NavigationContainer = createStackNavigator(
     },
 );
 
-export type NavigationRoutes = 'Home' | 'CreateDeck' | 'FlashcardView' | 'AccountSignup' | 'Login';
+export type NavigationRoutes =
+    | 'Home'
+    | 'CreateDeck'
+    | 'CreateFlashcard'
+    | 'FlashcardView'
+    | 'AccountSignup'
+    | 'Login'
+    | 'ManageDecks'
+    | 'ManageFlashcards';
 
 const AppContainer: NavigationContainer = createAppContainer(AppNavigator);
 

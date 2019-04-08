@@ -5,6 +5,7 @@ export interface DecksAppState {
     selectedDeck?: Deck;
     workingDeck?: Deck;
     selectedFlashcard?: Flashcard;
+    workingFlashcard?: Flashcard;
     inProgressFlashcards: Flashcard[];
     flip: boolean;
 }
