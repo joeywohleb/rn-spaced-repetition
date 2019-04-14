@@ -143,18 +143,34 @@ export const createFlashcard = () => {
     };
 };
 
+export const editFlashcard = (flashcard: Flashcard) => {
+    return async (dispatch: Dispatch<any>) => {
+        await dispatch(setWorkingFlashcard(flashcard));
+
+        NavigationService.navigateTo('CreateFlashcard');
+    };
+};
+
 export const saveFlashcard = () => {
     return async (dispatch: Dispatch<any>, getState: () => AppState) => {
-        let { decks, workingDeck } = getState().decks;
-        const { workingFlashcard } = getState().decks;
+        let { workingDeck } = getState().decks;
+        const { decks, workingFlashcard } = getState().decks;
 
         const flashcards: Flashcard[] = (workingDeck as Deck).flashcards;
 
+        const index = flashcards.findIndex((f: Flashcard) => f.id === (workingFlashcard as Flashcard).id);
+
         workingDeck = {
             ...(workingDeck as Deck),
-            flashcards: [...flashcards, workingFlashcard as Flashcard],
+            flashcards:
+                index === -1
+                    ? [...flashcards, workingFlashcard as Flashcard]
+                    : [
+                          ...flashcards.slice(0, index),
+                          { ...(workingFlashcard as Flashcard) },
+                          ...flashcards.slice(index + 1),
+                      ],
         };
-
         const deckIndex: number = decks.findIndex((d: Deck) => d.id === (workingDeck as Deck).id);
 
         const updatedDecks: Deck[] = [...decks.slice(0, deckIndex), { ...workingDeck }, ...decks.slice(deckIndex + 1)];
