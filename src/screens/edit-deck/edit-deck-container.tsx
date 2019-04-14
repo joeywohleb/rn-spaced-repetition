@@ -3,28 +3,27 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { createFlashcard, editFlashcard, saveFlashcardOrder } from '../../store/decks';
-import { ManageFlashcards } from './manage-flashcards';
+import { saveDeck, setWorkingDeck } from '../../store/decks';
+import { EditDeck } from './edit-deck';
 
 interface Props {
     workingDeck?: Deck;
 
-    createFlashcard: typeof createFlashcard;
-    editFlashcard: typeof editFlashcard;
-    saveFlashcardOrder: typeof saveFlashcardOrder;
+    saveDeck: typeof saveDeck;
+    setWorkingDeck: typeof setWorkingDeck;
 }
 
-class ManageFlashcardsScreen extends Component<Props> {
+class EditDeckScreen extends Component<Props> {
     public constructor(props: Props) {
         super(props);
     }
 
     public render() {
-        return <ManageFlashcards {...this.props} />;
+        return <EditDeck {...this.props} />;
     }
 }
 
-export const ManageFlashcardsContainer = connect(
+export const EditDeckContainer = connect(
     (state: AppState) => {
         return {
             workingDeck: state.decks.workingDeck,
@@ -33,10 +32,9 @@ export const ManageFlashcardsContainer = connect(
     (dispatch: Dispatch<Action<AppState>>) =>
         bindActionCreators(
             {
-                createFlashcard,
-                editFlashcard,
-                saveFlashcardOrder,
+                saveDeck,
+                setWorkingDeck,
             },
             dispatch,
         ),
-)(ManageFlashcardsScreen);
+)(EditDeckScreen);

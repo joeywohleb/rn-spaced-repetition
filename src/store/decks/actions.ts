@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import moment from 'moment';
+import { ReactText } from 'react';
 import { Dispatch } from 'redux';
 import uuid from 'uuid';
 
@@ -54,10 +56,7 @@ export const loadDecks = () => {
     return async (dispatch: Dispatch<any>) => {
         let decks: Deck[] = await StorageService.get<Deck>('decks');
 
-        if (decks.length === 0) {
-            decks = await createDefaultDeck();
-        }
-
+        decks = decks.length === 0 ? await createDefaultDeck() : (decks = _.orderBy(decks, 'order'));
         dispatch(setDecks(decks));
     };
 };
@@ -76,16 +75,49 @@ export const createDeck = () => {
     };
 };
 
-export const saveDeck = () => {
+export const saveDeck = (goBack: boolean = true) => {
     return async (dispatch: Dispatch<any>, getState: () => AppState) => {
         let { decks } = getState().decks;
         const { workingDeck } = getState().decks;
 
-        decks = [...decks, workingDeck as Deck];
+        const deckIndex = decks.findIndex((d: Deck) => d.id === (workingDeck as Deck).id);
+
+        decks =
+            deckIndex === -1
+                ? [...decks, workingDeck as Deck]
+                : [...decks.slice(0, deckIndex), { ...(workingDeck as Deck) }, ...decks.slice(deckIndex + 1)];
 
         await StorageService.set('decks', decks);
         await dispatch(setDecks(decks));
-        NavigationService.goBack();
+        if (goBack) {
+            NavigationService.goBack();
+        }
+    };
+};
+
+export const saveDeckOrder = (order: ReactText[]) => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { decks } = getState().decks;
+        let updatedDecks: Deck[] = decks.map((d: Deck) => {
+            return { ...d, order: order.findIndex((o) => o === d.id) };
+        });
+        updatedDecks = _.orderBy(updatedDecks, 'order');
+
+        await StorageService.set('decks', updatedDecks);
+        await dispatch(setDecks(updatedDecks));
+    };
+};
+
+export const saveFlashcardOrder = (order: ReactText[]) => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const workingDeck = getState().decks.workingDeck as Deck;
+        const flashcards: Flashcard[] = workingDeck.flashcards.map((f: Flashcard) => {
+            return { ...f, order: order.findIndex((o) => o === f.id) };
+        });
+        workingDeck.flashcards = _.orderBy(flashcards, 'order');
+
+        await dispatch(setWorkingDeck(workingDeck));
+        await dispatch(saveDeck(false));
     };
 };
 
@@ -117,6 +149,8 @@ export const selectDeck = (deck: Deck) => {
 
 export const selectWorkingDeck = (deck: Deck) => {
     return async (dispatch: Dispatch<any>) => {
+        deck.flashcards = _.orderBy(deck.flashcards, 'order');
+
         await dispatch(setWorkingDeck(deck));
         NavigationService.navigateTo('ManageFlashcards');
     };
@@ -143,18 +177,34 @@ export const createFlashcard = () => {
     };
 };
 
+export const editFlashcard = (flashcard: Flashcard) => {
+    return async (dispatch: Dispatch<any>) => {
+        await dispatch(setWorkingFlashcard(flashcard));
+
+        NavigationService.navigateTo('CreateFlashcard');
+    };
+};
+
 export const saveFlashcard = () => {
     return async (dispatch: Dispatch<any>, getState: () => AppState) => {
-        let { decks, workingDeck } = getState().decks;
-        const { workingFlashcard } = getState().decks;
+        let { workingDeck } = getState().decks;
+        const { decks, workingFlashcard } = getState().decks;
 
         const flashcards: Flashcard[] = (workingDeck as Deck).flashcards;
 
+        const index = flashcards.findIndex((f: Flashcard) => f.id === (workingFlashcard as Flashcard).id);
+
         workingDeck = {
             ...(workingDeck as Deck),
-            flashcards: [...flashcards, workingFlashcard as Flashcard],
+            flashcards:
+                index === -1
+                    ? [...flashcards, workingFlashcard as Flashcard]
+                    : [
+                          ...flashcards.slice(0, index),
+                          { ...(workingFlashcard as Flashcard) },
+                          ...flashcards.slice(index + 1),
+                      ],
         };
-
         const deckIndex: number = decks.findIndex((d: Deck) => d.id === (workingDeck as Deck).id);
 
         const updatedDecks: Deck[] = [...decks.slice(0, deckIndex), { ...workingDeck }, ...decks.slice(deckIndex + 1)];
