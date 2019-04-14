@@ -56,10 +56,7 @@ export const loadDecks = () => {
     return async (dispatch: Dispatch<any>) => {
         let decks: Deck[] = await StorageService.get<Deck>('decks');
 
-        if (decks.length === 0) {
-            decks = await createDefaultDeck();
-        }
-
+        decks = decks.length === 0 ? await createDefaultDeck() : (decks = _.orderBy(decks, 'order'));
         dispatch(setDecks(decks));
     };
 };
@@ -95,6 +92,19 @@ export const saveDeck = (goBack: boolean = true) => {
         if (goBack) {
             NavigationService.goBack();
         }
+    };
+};
+
+export const saveDeckOrder = (order: ReactText[]) => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { decks } = getState().decks;
+        let updatedDecks: Deck[] = decks.map((d: Deck) => {
+            return { ...d, order: order.findIndex((o) => o === d.id) };
+        });
+        updatedDecks = _.orderBy(updatedDecks, 'order');
+
+        await StorageService.set('decks', updatedDecks);
+        await dispatch(setDecks(updatedDecks));
     };
 };
 

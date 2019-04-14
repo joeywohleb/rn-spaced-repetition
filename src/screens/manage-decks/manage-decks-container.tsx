@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { createDeck, loadDecks, selectWorkingDeck } from '../../store/decks';
+import { createDeck, loadDecks, saveDeckOrder, selectWorkingDeck } from '../../store/decks';
 import { ManageDecks } from './manage-decks';
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
     createDeck: typeof createDeck;
     loadDecks: typeof loadDecks;
     selectWorkingDeck: typeof selectWorkingDeck;
+    saveDeckOrder: typeof saveDeckOrder;
 }
 
 class ManageDecksScreen extends Component<Props> {
@@ -36,6 +37,7 @@ export const ManageDecksContainer = connect(
                 createDeck,
                 loadDecks,
                 selectWorkingDeck,
+                saveDeckOrder,
             },
             dispatch,
         ),
