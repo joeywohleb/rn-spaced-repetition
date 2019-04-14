@@ -81,7 +81,12 @@ export const saveDeck = () => {
         let { decks } = getState().decks;
         const { workingDeck } = getState().decks;
 
-        decks = [...decks, workingDeck as Deck];
+        const deckIndex = decks.findIndex((d: Deck) => d.id === (workingDeck as Deck).id);
+
+        decks =
+            deckIndex === -1
+                ? [...decks, workingDeck as Deck]
+                : [...decks.slice(0, deckIndex), { ...(workingDeck as Deck) }, ...decks.slice(deckIndex + 1)];
 
         await StorageService.set('decks', decks);
         await dispatch(setDecks(decks));
