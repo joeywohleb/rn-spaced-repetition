@@ -1,9 +1,12 @@
-import { Button, Container, Content, Footer, Icon, Left, List, ListItem, Right, Text } from 'native-base';
-import React, { Component } from 'react';
+import _ from 'lodash';
+import { Button, Container, Content, Footer, Icon, Left, List, ListItem, Right, Row, Text } from 'native-base';
+import React, { Component, ReactText } from 'react';
 
+import SortableList, { RowProps } from 'react-native-sortable-list';
+import { NavigationEvents } from 'react-navigation';
 import { Header } from '../../components';
 import { Deck } from '../../models';
-import { createDeck, loadDecks, selectWorkingDeck } from '../../store/decks';
+import { createDeck, loadDecks, saveDeckOrder, selectWorkingDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
@@ -11,34 +14,106 @@ interface Props {
     loadDecks: typeof loadDecks;
     selectWorkingDeck: typeof selectWorkingDeck;
     createDeck: typeof createDeck;
+    saveDeckOrder: typeof saveDeckOrder;
 }
 
-export class ManageDecks extends Component<Props> {
+interface State {
+    isEditing: boolean;
+    scrollEnabled: boolean;
+    currentOrder: ReactText[];
+}
+
+export class ManageDecks extends Component<Props, State> {
     public constructor(props: Props) {
         super(props);
-    }
 
-    public componentDidMount() {
-        this.props.loadDecks();
+        this.state = {
+            isEditing: false,
+            scrollEnabled: true,
+            currentOrder: _.orderBy(this.props.decks, 'order').map((d: Deck) => {
+                return d.id;
+            }),
+        };
     }
 
     public render() {
+        const decks = _.orderBy(this.props.decks, 'order').reduce((obj: any, item) => {
+            obj[item.id] = item;
+            return obj;
+        }, {});
         return (
             <Container>
-                <Header>Decks</Header>
-                <Content>
-                    <List>
-                        {this.props.decks.map((d: Deck) => (
-                            <ListItem key={d.id} onPress={() => this.props.selectWorkingDeck(d)}>
-                                <Left>
-                                    <Text>{d.name}</Text>
-                                </Left>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </ListItem>
-                        ))}
-                    </List>
+                <Header
+                    headerLeft={
+                        this.state.isEditing ? (
+                            <Button
+                                hasText
+                                transparent
+                                onPress={() => this.setState({ isEditing: !this.state.isEditing })}
+                            >
+                                <Text>Cancel</Text>
+                            </Button>
+                        ) : (
+                            undefined
+                        )
+                    }
+                    headerRight={
+                        <Button hasText transparent onPress={this.save}>
+                            <Text>{this.state.isEditing ? 'Save' : 'Edit'}</Text>
+                        </Button>
+                    }
+                >
+                    Decks
+                </Header>
+
+                <NavigationEvents onDidBlur={() => this.setState({ isEditing: false })} />
+
+                <Content scrollEnabled={this.state.scrollEnabled}>
+                    {this.state.isEditing ? (
+                        <List>
+                            <SortableList
+                                contentContainerStyle={{ flex: 1 }}
+                                data={decks}
+                                scrollEnabled={false}
+                                order={this.state.currentOrder}
+                                onActivateRow={() => this.setState({ scrollEnabled: false })}
+                                onReleaseRow={() => this.setState({ scrollEnabled: true })}
+                                onChangeOrder={(nextOrder) => this.setState({ currentOrder: nextOrder })}
+                                renderRow={(row: RowProps) => (
+                                    <Row
+                                        key={row.key}
+                                        style={{
+                                            padding: 10,
+                                            marginLeft: 7,
+                                            flex: 1,
+                                            borderBottomWidth: 0.5,
+                                            borderColor: '#c9c9c9',
+                                        }}
+                                    >
+                                        <Left>
+                                            <Text>{row.data.name}</Text>
+                                        </Left>
+                                        <Right>
+                                            <Icon name="reorder" />
+                                        </Right>
+                                    </Row>
+                                )}
+                            />
+                        </List>
+                    ) : (
+                        <List>
+                            {this.props.decks.map((d: Deck) => (
+                                <ListItem key={d.id} onPress={() => this.props.selectWorkingDeck(d)}>
+                                    <Left>
+                                        <Text>{d.name}</Text>
+                                    </Left>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                            ))}
+                        </List>
+                    )}
                 </Content>
                 <Footer>
                     <Button hasText transparent onPress={this.props.createDeck}>
@@ -48,4 +123,11 @@ export class ManageDecks extends Component<Props> {
             </Container>
         );
     }
+
+    private save = () => {
+        if (this.state.isEditing) {
+            this.props.saveDeckOrder(this.state.currentOrder);
+        }
+        this.setState({ isEditing: !this.state.isEditing });
+    };
 }
