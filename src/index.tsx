@@ -15,6 +15,7 @@ import {
     AccountSignupContainer,
     CreateDeckContainer,
     CreateFlashcardContainer,
+    EditFlashcardContainer,
     FlashcardViewContainer,
     HomeContainer,
     LoginContainer,
@@ -30,6 +31,7 @@ const AppNavigator: NavigationContainer = createStackNavigator(
         Home: HomeContainer,
         CreateDeck: CreateDeckContainer,
         CreateFlashcard: CreateFlashcardContainer,
+        EditFlashcard: EditFlashcardContainer,
         FlashcardView: FlashcardViewContainer,
         AccountSignup: AccountSignupContainer,
         Login: LoginContainer,
@@ -50,6 +52,7 @@ export type NavigationRoutes =
     | 'Home'
     | 'CreateDeck'
     | 'CreateFlashcard'
+    | 'EditFlashcard'
     | 'FlashcardView'
     | 'AccountSignup'
     | 'Login'

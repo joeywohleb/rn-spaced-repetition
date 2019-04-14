@@ -4,12 +4,13 @@ import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import { Header } from '../../components';
 import { Deck, Flashcard } from '../../models';
-import { createFlashcard } from '../../store/decks';
+import { createFlashcard, editFlashcard } from '../../store/decks';
 
 interface Props {
     workingDeck?: Deck;
 
     createFlashcard: typeof createFlashcard;
+    editFlashcard: typeof editFlashcard;
 }
 
 export class ManageFlashcards extends Component<Props> {
@@ -26,7 +27,7 @@ export class ManageFlashcards extends Component<Props> {
                 <Content>
                     <List>
                         {workingDeck.flashcards.map((f: Flashcard) => (
-                            <ListItem key={f.id} onPress={() => undefined}>
+                            <ListItem key={f.id} onPress={() => this.props.editFlashcard(f)}>
                                 <Left>
                                     <Text>{f.name}</Text>
                                 </Left>
