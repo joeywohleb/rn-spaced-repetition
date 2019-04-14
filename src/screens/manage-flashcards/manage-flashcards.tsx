@@ -4,6 +4,7 @@ import { StyleSheet, TextStyle, ViewStyle } from 'react-native';
 
 import { Header } from '../../components';
 import { Deck, Flashcard } from '../../models';
+import { NavigationService } from '../../services/navigation';
 import { createFlashcard, editFlashcard } from '../../store/decks';
 
 interface Props {
@@ -22,7 +23,7 @@ export class ManageFlashcards extends Component<Props> {
         const workingDeck: Deck = this.props.workingDeck as Deck;
         return (
             <Container style={styles.container}>
-                <Header>Flashcards</Header>
+                <Header>{workingDeck.name}</Header>
 
                 <Content>
                     <List>
@@ -39,9 +40,16 @@ export class ManageFlashcards extends Component<Props> {
                     </List>
                 </Content>
                 <Footer>
-                    <Button hasText transparent onPress={this.props.createFlashcard}>
-                        <Text>Create Flashcard</Text>
-                    </Button>
+                    <Left>
+                        <Button hasText transparent onPress={() => NavigationService.navigateTo('EditDeck')}>
+                            <Text>Edit Name</Text>
+                        </Button>
+                    </Left>
+                    <Right>
+                        <Button hasText transparent onPress={this.props.createFlashcard}>
+                            <Text>Create Flashcard</Text>
+                        </Button>
+                    </Right>
                 </Footer>
             </Container>
         );
