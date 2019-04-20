@@ -41,6 +41,9 @@ export class ManageDecks extends Component<Props, State> {
             obj[item.id] = item;
             return obj;
         }, {});
+
+        const activeDecks = this.props.decks.filter((d: Deck) => d.isActive);
+        const inactiveDecks = this.props.decks.filter((d: Deck) => !d.isActive);
         return (
             <Container>
                 <Header
@@ -102,7 +105,28 @@ export class ManageDecks extends Component<Props, State> {
                         </List>
                     ) : (
                         <List>
-                            {this.props.decks.map((d: Deck) => (
+                            {activeDecks.length > 0 && (
+                                <ListItem itemDivider>
+                                    <Text>Active</Text>
+                                </ListItem>
+                            )}
+                            {activeDecks.map((d: Deck) => (
+                                <ListItem key={d.id} onPress={() => this.props.selectWorkingDeck(d)}>
+                                    <Left>
+                                        <Text>{d.name}</Text>
+                                    </Left>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                            ))}
+
+                            {inactiveDecks.length > 0 && (
+                                <ListItem itemDivider>
+                                    <Text>Inactive</Text>
+                                </ListItem>
+                            )}
+                            {inactiveDecks.map((d: Deck) => (
                                 <ListItem key={d.id} onPress={() => this.props.selectWorkingDeck(d)}>
                                     <Left>
                                         <Text>{d.name}</Text>

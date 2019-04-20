@@ -67,11 +67,23 @@ export const createDeck = () => {
             id: uuid(),
             dateCreated: moment().toDate(),
             name: '',
+            isActive: true,
             flashcards: [],
         };
 
         await dispatch(setWorkingDeck(deck));
         NavigationService.navigateTo('CreateDeck');
+    };
+};
+
+export const toggleActiveDeck = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { workingDeck } = getState().decks;
+
+        workingDeck!.isActive = !workingDeck!.isActive;
+
+        await dispatch(setWorkingDeck(workingDeck!));
+        await dispatch(saveDeck());
     };
 };
 
@@ -127,6 +139,7 @@ const createDefaultDeck = async (): Promise<Deck[]> => {
         ...d,
         id: deckId,
         dateCreated: moment().toDate(),
+        isActive: true,
         flashcards: d.flashcards.map((f: Flashcard) => ({
             ...f,
             id: uuid(),
@@ -134,6 +147,7 @@ const createDefaultDeck = async (): Promise<Deck[]> => {
             dateCreated: moment().toDate(),
             history: [],
             proficiency: 0,
+            isActive: true,
             nextViewDate: moment().toDate(),
         })),
     }));
@@ -153,7 +167,9 @@ export const selectAll = () => {
     return async (dispatch: Dispatch<any>, getState: () => AppState) => {
         const { decks } = getState().decks;
 
-        const flashcards: Flashcard[] = _.flatten(decks.map((d) => filterReady(d.flashcards)));
+        const flashcards: Flashcard[] = _.flatten(
+            decks.filter((d: Deck) => d.isActive).map((d) => filterReady(d.flashcards)),
+        );
         await dispatch(setInProgressFlashcards([...flashcards]));
         NavigationService.navigateTo('FlashcardView');
     };
@@ -182,6 +198,7 @@ export const createFlashcard = () => {
             back: '',
             order: ((workingDeck || { flashcards: [] }).flashcards || []).length,
             proficiency: 0,
+            isActive: true,
             history: [],
         };
 
@@ -194,7 +211,17 @@ export const editFlashcard = (flashcard: Flashcard) => {
     return async (dispatch: Dispatch<any>) => {
         await dispatch(setWorkingFlashcard(flashcard));
 
-        NavigationService.navigateTo('CreateFlashcard');
+        NavigationService.navigateTo('EditFlashcard');
+    };
+};
+
+export const toggleActiveFlashcard = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { workingFlashcard } = getState().decks;
+        workingFlashcard!.isActive = !workingFlashcard!.isActive;
+
+        await dispatch(setWorkingFlashcard(workingFlashcard!));
+        dispatch(saveFlashcard());
     };
 };
 
@@ -230,7 +257,7 @@ export const saveFlashcard = () => {
 };
 
 const filterReady = (flashcards: Flashcard[]) => {
-    return [...flashcards.filter((f: Flashcard) => moment().isSameOrAfter(moment(f.nextViewDate)))];
+    return [...flashcards.filter((f: Flashcard) => f.isActive && moment().isSameOrAfter(moment(f.nextViewDate)))];
 };
 
 export const saveResponse = (flashcard: Flashcard, answeredCorrectly: boolean) => {

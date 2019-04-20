@@ -10,5 +10,6 @@ export interface Flashcard {
     dateCreated: Date;
     nextViewDate: Date;
     proficiency: number;
+    isActive: boolean;
     history: ReviewHistory[];
 }

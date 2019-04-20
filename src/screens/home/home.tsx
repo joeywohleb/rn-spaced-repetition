@@ -47,16 +47,18 @@ export class Home extends Component<Props> {
                                 <Icon name="arrow-forward" />
                             </Right>
                         </ListItem>
-                        {this.props.decks.map((d: Deck) => (
-                            <ListItem key={d.id} onPress={() => this.props.selectDeck(d)}>
-                                <Left>
-                                    <Text>{d.name}</Text>
-                                </Left>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </ListItem>
-                        ))}
+                        {this.props.decks
+                            .filter((d: Deck) => d.isActive)
+                            .map((d: Deck) => (
+                                <ListItem key={d.id} onPress={() => this.props.selectDeck(d)}>
+                                    <Left>
+                                        <Text>{d.name}</Text>
+                                    </Left>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                            ))}
                     </List>
                 </Content>
                 <Footer>

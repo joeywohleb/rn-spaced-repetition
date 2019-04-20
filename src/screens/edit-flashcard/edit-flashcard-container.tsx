@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck, Flashcard } from '../../models';
-import { saveFlashcard, setWorkingFlashcard } from '../../store/decks';
+import { saveFlashcard, setWorkingFlashcard, toggleActiveFlashcard } from '../../store/decks';
 import { EditFlashcard } from './edit-flashcard';
 
 interface Props {
@@ -12,6 +12,7 @@ interface Props {
 
     saveFlashcard: typeof saveFlashcard;
     setWorkingFlashcard: typeof setWorkingFlashcard;
+    toggleActiveFlashcard: typeof toggleActiveFlashcard;
 }
 
 class EditFlashcardScreen extends Component<Props> {
@@ -36,6 +37,7 @@ export const EditFlashcardContainer = connect(
             {
                 saveFlashcard,
                 setWorkingFlashcard,
+                toggleActiveFlashcard,
             },
             dispatch,
         ),

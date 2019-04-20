@@ -44,6 +44,9 @@ export class ManageFlashcards extends Component<Props, State> {
             return obj;
         }, {});
 
+        const activeFlashcards = workingDeck.flashcards.filter((f: Flashcard) => f.isActive);
+        const inactiveFlashcards = workingDeck.flashcards.filter((f: Flashcard) => !f.isActive);
+
         return (
             <Container style={styles.container}>
                 <Header
@@ -105,7 +108,27 @@ export class ManageFlashcards extends Component<Props, State> {
                         </List>
                     ) : (
                         <List>
-                            {workingDeck.flashcards.map((f: Flashcard) => (
+                            {activeFlashcards.length > 0 && (
+                                <ListItem itemDivider>
+                                    <Text>Active</Text>
+                                </ListItem>
+                            )}
+                            {activeFlashcards.map((f: Flashcard) => (
+                                <ListItem key={f.id} onPress={() => this.props.editFlashcard(f)}>
+                                    <Left>
+                                        <Text>{f.name}</Text>
+                                    </Left>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                            ))}
+                            {inactiveFlashcards.length > 0 && (
+                                <ListItem itemDivider>
+                                    <Text>Inactive</Text>
+                                </ListItem>
+                            )}
+                            {inactiveFlashcards.map((f: Flashcard) => (
                                 <ListItem key={f.id} onPress={() => this.props.editFlashcard(f)}>
                                     <Left>
                                         <Text>{f.name}</Text>
@@ -121,12 +144,12 @@ export class ManageFlashcards extends Component<Props, State> {
                 <Footer>
                     <Left>
                         <Button hasText transparent onPress={() => NavigationService.navigateTo('EditDeck')}>
-                            <Text>Edit Name</Text>
+                            <Text>Edit</Text>
                         </Button>
                     </Left>
                     <Right>
                         <Button hasText transparent onPress={this.props.createFlashcard}>
-                            <Text>Create Flashcard</Text>
+                            <Text>Add Flashcard</Text>
                         </Button>
                     </Right>
                 </Footer>
