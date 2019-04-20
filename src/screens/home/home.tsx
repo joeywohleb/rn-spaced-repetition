@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Header } from '../../components';
 import { Deck } from '../../models';
 import { NavigationService } from '../../services';
-import { createDeck, loadDecks, selectDeck } from '../../store/decks';
+import { createDeck, loadDecks, selectAll, selectDeck } from '../../store/decks';
 
 interface Props {
     decks: Deck[];
@@ -12,6 +12,7 @@ interface Props {
     loadDecks: typeof loadDecks;
     selectDeck: typeof selectDeck;
     createDeck: typeof createDeck;
+    selectAll: typeof selectAll;
 }
 
 export class Home extends Component<Props> {
@@ -38,16 +39,26 @@ export class Home extends Component<Props> {
                 </Header>
                 <Content>
                     <List>
-                        {this.props.decks.map((d: Deck) => (
-                            <ListItem key={d.id} onPress={() => this.props.selectDeck(d)}>
-                                <Left>
-                                    <Text>{d.name}</Text>
-                                </Left>
-                                <Right>
-                                    <Icon name="arrow-forward" />
-                                </Right>
-                            </ListItem>
-                        ))}
+                        <ListItem onPress={() => this.props.selectAll()}>
+                            <Left>
+                                <Text>All</Text>
+                            </Left>
+                            <Right>
+                                <Icon name="arrow-forward" />
+                            </Right>
+                        </ListItem>
+                        {this.props.decks
+                            .filter((d: Deck) => d.isActive)
+                            .map((d: Deck) => (
+                                <ListItem key={d.id} onPress={() => this.props.selectDeck(d)}>
+                                    <Left>
+                                        <Text>{d.name}</Text>
+                                    </Left>
+                                    <Right>
+                                        <Icon name="arrow-forward" />
+                                    </Right>
+                                </ListItem>
+                            ))}
                     </List>
                 </Content>
                 <Footer>

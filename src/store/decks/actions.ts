@@ -67,11 +67,23 @@ export const createDeck = () => {
             id: uuid(),
             dateCreated: moment().toDate(),
             name: '',
+            isActive: true,
             flashcards: [],
         };
 
         await dispatch(setWorkingDeck(deck));
         NavigationService.navigateTo('CreateDeck');
+    };
+};
+
+export const toggleActiveDeck = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { workingDeck } = getState().decks;
+
+        workingDeck!.isActive = !workingDeck!.isActive;
+
+        await dispatch(setWorkingDeck(workingDeck!));
+        await dispatch(saveDeck());
     };
 };
 
@@ -122,16 +134,20 @@ export const saveFlashcardOrder = (order: ReactText[]) => {
 };
 
 const createDefaultDeck = async (): Promise<Deck[]> => {
+    const deckId = uuid();
     const decks: Deck[] = (defaultSets as Deck[]).map((d: Deck) => ({
         ...d,
-        id: uuid(),
+        id: deckId,
         dateCreated: moment().toDate(),
+        isActive: true,
         flashcards: d.flashcards.map((f: Flashcard) => ({
             ...f,
             id: uuid(),
+            deckId,
             dateCreated: moment().toDate(),
             history: [],
             proficiency: 0,
+            isActive: true,
             nextViewDate: moment().toDate(),
         })),
     }));
@@ -143,6 +159,18 @@ export const selectDeck = (deck: Deck) => {
     return async (dispatch: Dispatch<any>) => {
         await dispatch(setSelectedDeck(deck));
         await dispatch(setInProgressFlashcards(filterReady(deck.flashcards)));
+        NavigationService.navigateTo('FlashcardView');
+    };
+};
+
+export const selectAll = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { decks } = getState().decks;
+
+        const flashcards: Flashcard[] = _.flatten(
+            decks.filter((d: Deck) => d.isActive).map((d) => filterReady(d.flashcards)),
+        );
+        await dispatch(setInProgressFlashcards([...flashcards]));
         NavigationService.navigateTo('FlashcardView');
     };
 };
@@ -162,6 +190,7 @@ export const createFlashcard = () => {
 
         const card: Flashcard = {
             id: uuid(),
+            deckId: (workingDeck as Deck).id,
             dateCreated: moment().toDate(),
             nextViewDate: moment().toDate(),
             name: '',
@@ -169,6 +198,7 @@ export const createFlashcard = () => {
             back: '',
             order: ((workingDeck || { flashcards: [] }).flashcards || []).length,
             proficiency: 0,
+            isActive: true,
             history: [],
         };
 
@@ -181,7 +211,17 @@ export const editFlashcard = (flashcard: Flashcard) => {
     return async (dispatch: Dispatch<any>) => {
         await dispatch(setWorkingFlashcard(flashcard));
 
-        NavigationService.navigateTo('CreateFlashcard');
+        NavigationService.navigateTo('EditFlashcard');
+    };
+};
+
+export const toggleActiveFlashcard = () => {
+    return async (dispatch: Dispatch<any>, getState: () => AppState) => {
+        const { workingFlashcard } = getState().decks;
+        workingFlashcard!.isActive = !workingFlashcard!.isActive;
+
+        await dispatch(setWorkingFlashcard(workingFlashcard!));
+        dispatch(saveFlashcard());
     };
 };
 
@@ -217,18 +257,18 @@ export const saveFlashcard = () => {
 };
 
 const filterReady = (flashcards: Flashcard[]) => {
-    return [...flashcards.filter((f: Flashcard) => moment().isSameOrAfter(moment(f.nextViewDate)))];
+    return [...flashcards.filter((f: Flashcard) => f.isActive && moment().isSameOrAfter(moment(f.nextViewDate)))];
 };
 
-export const saveResponse = (id: string, answeredCorrectly: boolean) => {
+export const saveResponse = (flashcard: Flashcard, answeredCorrectly: boolean) => {
     return async (dispatch: Dispatch<any>, getState: () => AppState) => {
-        const { selectedDeck, decks, inProgressFlashcards } = getState().decks;
+        const { decks, inProgressFlashcards } = getState().decks;
 
-        if (!selectedDeck) {
-            return;
-        }
+        const selectedDeck = decks.find((d) => d.id === (flashcard as Flashcard).deckId);
 
-        const cardIndex = selectedDeck.flashcards.findIndex((f: Flashcard) => f.id === id);
+        if (!selectedDeck) return;
+
+        const cardIndex = selectedDeck.flashcards.findIndex((f: Flashcard) => f.id === flashcard.id);
 
         const updatedFlashcard: Flashcard = updateProficiency(selectedDeck.flashcards[cardIndex], answeredCorrectly);
 

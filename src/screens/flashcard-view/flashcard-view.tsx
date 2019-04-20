@@ -33,8 +33,8 @@ export class FlashcardView extends Component<Props> {
                         ref={(d) => (this.deckSwiper = d)}
                         looping={false}
                         dataSource={this.props.inProgressFlashcards}
-                        onSwipeLeft={(card: Flashcard) => this.props.saveResponse(card.id, false)}
-                        onSwipeRight={(card: Flashcard) => this.props.saveResponse(card.id, true)}
+                        onSwipeLeft={(card: Flashcard) => this.props.saveResponse(card, false)}
+                        onSwipeRight={(card: Flashcard) => this.props.saveResponse(card, true)}
                         renderItem={(card: Flashcard) => (
                             <FlipCard style={styles.flashcard} flip={this.props.flip}>
                                 <FlashcardComponent>{card.front}</FlashcardComponent>

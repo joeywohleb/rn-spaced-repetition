@@ -2,6 +2,7 @@ import { ReviewHistory } from './';
 
 export interface Flashcard {
     id: string;
+    deckId: string;
     name: string;
     front: string;
     back: string;
@@ -9,5 +10,6 @@ export interface Flashcard {
     dateCreated: Date;
     nextViewDate: Date;
     proficiency: number;
+    isActive: boolean;
     history: ReviewHistory[];
 }

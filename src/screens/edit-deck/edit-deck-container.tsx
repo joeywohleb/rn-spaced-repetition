@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Action, bindActionCreators, Dispatch } from 'redux';
 
 import { AppState, Deck } from '../../models';
-import { saveDeck, setWorkingDeck } from '../../store/decks';
+import { saveDeck, setWorkingDeck, toggleActiveDeck } from '../../store/decks';
 import { EditDeck } from './edit-deck';
 
 interface Props {
@@ -11,6 +11,7 @@ interface Props {
 
     saveDeck: typeof saveDeck;
     setWorkingDeck: typeof setWorkingDeck;
+    toggleActiveDeck: typeof toggleActiveDeck;
 }
 
 class EditDeckScreen extends Component<Props> {
@@ -34,6 +35,7 @@ export const EditDeckContainer = connect(
             {
                 saveDeck,
                 setWorkingDeck,
+                toggleActiveDeck,
             },
             dispatch,
         ),
