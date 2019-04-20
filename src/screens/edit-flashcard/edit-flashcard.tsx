@@ -1,10 +1,10 @@
-import { Button, Container, Content, Form, Input, Item, Text, Textarea } from 'native-base';
+import { Button, Container, Content, Footer, Form, Input, Item, Text, Textarea } from 'native-base';
 import React, { Component } from 'react';
 import { StyleSheet, ViewStyle } from 'react-native';
 
 import { Header } from '../../components';
 import { Deck, Flashcard } from '../../models';
-import { saveFlashcard, setWorkingFlashcard } from '../../store/decks';
+import { saveFlashcard, setWorkingFlashcard, toggleActiveFlashcard } from '../../store/decks';
 
 interface Props {
     workingDeck?: Deck;
@@ -12,6 +12,7 @@ interface Props {
 
     saveFlashcard: typeof saveFlashcard;
     setWorkingFlashcard: typeof setWorkingFlashcard;
+    toggleActiveFlashcard: typeof toggleActiveFlashcard;
 }
 
 export class EditFlashcard extends Component<Props> {
@@ -68,6 +69,12 @@ export class EditFlashcard extends Component<Props> {
                         />
                     </Form>
                 </Content>
+
+                <Footer>
+                    <Button hasText transparent onPress={this.props.toggleActiveFlashcard}>
+                        <Text>{this.props.workingFlashcard!.isActive ? 'Deactivate' : 'Reactivate'}</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }

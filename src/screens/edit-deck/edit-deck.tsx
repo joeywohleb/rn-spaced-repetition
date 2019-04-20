@@ -1,15 +1,16 @@
-import { Button, Container, Content, Form, Input, Item, Label, Text } from 'native-base';
+import { Button, Container, Content, Footer, Form, Input, Item, Label, Text } from 'native-base';
 import React, { Component } from 'react';
 
 import { Header } from '../../components';
 import { Deck } from '../../models';
-import { saveDeck, setWorkingDeck } from '../../store/decks';
+import { saveDeck, setWorkingDeck, toggleActiveDeck } from '../../store/decks';
 
 interface Props {
     workingDeck?: Deck;
 
     saveDeck: typeof saveDeck;
     setWorkingDeck: typeof setWorkingDeck;
+    toggleActiveDeck: typeof toggleActiveDeck;
 }
 
 export class EditDeck extends Component<Props> {
@@ -41,6 +42,11 @@ export class EditDeck extends Component<Props> {
                         </Item>
                     </Form>
                 </Content>
+                <Footer>
+                    <Button hasText transparent onPress={this.props.toggleActiveDeck}>
+                        <Text>{this.props.workingDeck!.isActive ? 'Deactivate' : 'Reactivate'}</Text>
+                    </Button>
+                </Footer>
             </Container>
         );
     }
